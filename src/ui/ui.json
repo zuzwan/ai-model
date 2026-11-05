@@ -1,0 +1,20 @@
+{
+  "speeds": [2, 5, 12, 30],
+  "defaultSpeed": 2,
+  "recordCap": 4000,
+  "refTicks": 360,
+  "maxTicksPerFrame": 8,
+  "scrubStep": 1,
+  "scrubShiftStep": 30,
+  "strip": {
+    "height": 44,
+    "gutter": 16,
+    "labelPx": 11,
+    "window": 600,
+    "railHeight": 10,
+    "lineWidth": 1.25,
+    "ink": "#000000",
+    "grey": "#b5b5b5",
+    "ranges": { "W": [0, 1], "U": [0, 2], "V": [0, 1], "G": [-0.2, 0.8], "R": [0, 400], "Λ": [0, 1] }
+  }
+}

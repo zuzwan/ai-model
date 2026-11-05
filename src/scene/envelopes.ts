@@ -19,6 +19,6 @@ export function buildEnvelopes(): Part[] {
     const inset = r * (1 - Math.SQRT1_2) * 2;
     const edges = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(l.w - inset, l.h - inset, l.d - inset)), em);
     group.add(faces, edges);
-    return { id: e.id, level: 'envelope', envelopeOf: e.id, object: group, pickables: [], setWire: fader([fm], [em]) };
+    return { id: e.id, level: 'envelope', envelopeOf: e.id, object: group, pickables: [], ...fader([fm], [em]) };
   });
 }

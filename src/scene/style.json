@@ -133,5 +133,95 @@
       "tray": 2,
       "ring": 3
     }
+  },
+  "dimInk": "#e6e6e6",
+  "dimAmount": 0.85,
+  "glowOpacity": 0.35,
+  "particles": {
+    "lutSamples": 96
+  },
+  "fills": {
+    "L1": {
+      "var": "corpus_human",
+      "scale": 120
+    },
+    "L2": {
+      "var": "train_progress",
+      "scale": 1
+    },
+    "L3": {
+      "var": "capacity",
+      "scale": 1.6
+    },
+    "L4": {
+      "var": "request_rate",
+      "scale": 1.0
+    },
+    "L5": {
+      "var": "reserve",
+      "scale": 320
+    },
+    "L6": {
+      "var": "benchmark_score",
+      "scale": 0.5
+    },
+    "L7": {
+      "var": "allocation_total",
+      "scale": 1.5
+    },
+    "L8": {
+      "var": "filter_strength",
+      "scale": 1
+    },
+    "L9": {
+      "var": "legitimacy",
+      "scale": 1
+    },
+    "L10": {
+      "var": "generations",
+      "scale": 24
+    },
+    "L11": {
+      "var": "know_how",
+      "scale": 1.25
+    },
+    "M1": {
+      "var": "capability",
+      "scale": 1
+    },
+    "M3": {
+      "var": "occupancy",
+      "scale": 1.6
+    }
+  },
+  "pulse": {
+    "amplitude": 0.02,
+    "perTick": 0.25,
+    "maxHz": 3.0,
+    "tiltPerWeight": 0.9
+  },
+  "glow": {
+    "flashMs": 900,
+    "modelFlow": 0.6
+  },
+  "apertureScale": {
+    "S1": 0.6,
+    "S2": 1.0,
+    "S3": 0.6,
+    "S4": 0.3,
+    "S5": 0.8
+  },
+  "deprecationFadeMs": 240,
+  "prewarmSeconds": 3,
+  "traces": {
+    "window": 480,
+    "inset": 0.05,
+    "usage": "#000000",
+    "usefulness": "#9a9a9a"
+  },
+  "archive": {
+    "maxMarks": 40,
+    "markHeight": 0.12,
+    "color": "#000000"
   }
 }

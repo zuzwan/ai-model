@@ -561,9 +561,10 @@
    "id": "data",
    "particle": {
     "color": "#7a7a7a",
-    "size": 0.022,
+    "size": 0.014,
     "speed": 0.35,
-    "cap": 4000
+    "cap": 4000,
+    "density": 3
    },
    "conduit": {
     "color": "#9a9a9a",
@@ -574,9 +575,10 @@
    "id": "compute",
    "particle": {
     "color": "#b4b4b4",
-    "size": 0.01,
+    "size": 0.006,
     "speed": 1.2,
-    "cap": 4000
+    "cap": 4000,
+    "density": 5
    },
    "conduit": {
     "color": "#c4c4c4",
@@ -587,9 +589,10 @@
    "id": "currency",
    "particle": {
     "color": "#F2A900",
-    "size": 0.026,
+    "size": 0.016,
     "speed": 0.5,
-    "cap": 4000
+    "cap": 4000,
+    "density": 1.2
    },
    "conduit": {
     "color": "#b8b8b8",
@@ -600,9 +603,10 @@
    "id": "prompts",
    "particle": {
     "color": "#000000",
-    "size": 0.014,
+    "size": 0.01,
     "speed": 0.9,
-    "cap": 4000
+    "cap": 4000,
+    "density": 3
    },
    "conduit": {
     "color": "#3c3c3c",
@@ -613,9 +617,10 @@
    "id": "signals",
    "particle": {
     "color": "#6e6e6e",
-    "size": 0.012,
+    "size": 0.008,
     "speed": 0.7,
-    "cap": 4000
+    "cap": 4000,
+    "density": 1
    },
    "conduit": {
     "color": "#8a8a8a",
@@ -626,9 +631,10 @@
    "id": "weights",
    "particle": {
     "color": "#2a2a2a",
-    "size": 0.03,
+    "size": 0.018,
     "speed": 0.25,
-    "cap": 4000
+    "cap": 4000,
+    "density": 2
    },
    "conduit": {
     "color": "#505050",
@@ -639,9 +645,10 @@
    "id": "heat",
    "particle": {
     "color": "#d0d0d0",
-    "size": 0.016,
+    "size": 0.012,
     "speed": 0.15,
-    "cap": 4000
+    "cap": 4000,
+    "density": 3
    },
    "conduit": {
     "color": "#e0e0e0",

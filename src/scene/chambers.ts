@@ -7,6 +7,8 @@ import { type Part, faceMaterial, edgeMaterial, fader, pickMaterial } from './pa
 export interface Chamber extends Part {
   /** Fill levels 0..1, one per channel. */
   setFill(levels: number[]): void;
+  /** Throughput pulse: a scale oscillation, `amount` of the chamber size, and a tilt of the fill plane in radians. */
+  setPulse(amount: number, tilt?: number): void;
 }
 
 function cylinderEdges(r: number, h: number): THREE.BufferGeometry {
@@ -123,11 +125,15 @@ function buildChamber(c: Component): Chamber {
       f.volume.visible = v > 0.001;
     });
   };
+  const setPulse = (amount: number, tilt = 0) => {
+    group.scale.setScalar(1 + amount);
+    for (const f of fills) f.plane.rotation.z = tilt;
+  };
   const rest = l.rest ?? 0;
   const restLevels = (l.channels ?? 1) > 1 ? Array.from({ length: l.channels! }, (_, i) => rest * (1.1 - 0.2 * i)) : [rest];
   setFill(restLevels);
 
-  return { id: c.id, level: c.level, object: group, pickables, setWire: fader(faces, edges), setFill };
+  return { id: c.id, level: c.level, object: group, pickables, ...fader(faces, edges, undefined, [fm]), setFill, setPulse };
 }
 
 export function buildChambers(): Chamber[] {

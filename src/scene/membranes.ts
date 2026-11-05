@@ -64,6 +64,6 @@ export function buildMembranes(): Membrane[] {
       }
     };
     for (let i = 0; i < count; i++) setAperture(i, l.rest);
-    return { id: s.id, level: 'loop', object: group, pickables: [proxy], setWire: fader(faces, edges), setAperture };
+    return { id: s.id, level: 'loop', object: group, pickables: [proxy], ...fader(faces, edges), setAperture };
   });
 }

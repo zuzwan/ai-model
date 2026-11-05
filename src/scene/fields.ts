@@ -36,12 +36,12 @@ export function buildFields(): Part[] {
       }
       const pm = new THREE.PointsMaterial({ color: style.cloudColor, size: style.cloudPointSize, transparent: true, opacity: 1, depthWrite: false });
       group.add(new THREE.Points(new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(pos, 3)), pm));
-      return { id: c.id, level: c.level, object: group, pickables: [proxy], setWire: fader([pm], []) };
+      return { id: c.id, level: c.level, object: group, pickables: [proxy], ...fader([pm], []) };
     }
     const geom = new THREE.BoxGeometry(l.w, l.h, l.d);
     const fm = faceMaterial(style.fieldOpacity);
     const em = edgeMaterial(style.fieldEdge);
     group.add(new THREE.Mesh(geom, fm), new THREE.LineSegments(new THREE.EdgesGeometry(geom), em));
-    return { id: c.id, level: c.level, object: group, pickables: [proxy], setWire: fader([fm], [em], edgeBase) };
+    return { id: c.id, level: c.level, object: group, pickables: [proxy], ...fader([fm], [em], edgeBase) };
   });
 }

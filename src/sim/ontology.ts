@@ -30,7 +30,7 @@ export interface Envelope { id: 'loop' | 'model'; layout: Layout }
 
 export interface Substance {
   id: string;
-  particle: { color: string; size: number; speed: number; cap: number };
+  particle: { color: string; size: number; speed: number; cap: number; density: number };
   conduit: { color: string; style: 'tube' | 'dashed' | 'none' };
 }
 

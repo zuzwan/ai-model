@@ -22,3 +22,10 @@ html, body { margin: 0; height: 100%; background: var(--paper); color: var(--ink
   color: var(--ink); background: var(--paper); padding: 2px 5px; white-space: pre;
   transition: opacity 120ms linear;
 }
+
+.strip {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  background: var(--paper);
+  transition: opacity var(--fade) linear;
+}
+.strip canvas { display: block; cursor: default; }

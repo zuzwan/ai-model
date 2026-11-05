@@ -17,18 +17,18 @@ export function buildConduits(): Conduit[] {
     const path = paths.get(f.id)!;
     const group = new THREE.Group();
     const color = new THREE.Color(sub.conduit.color);
-    let fade: (w: number) => void;
+    let look: ReturnType<typeof fader>;
     if (sub.conduit.style === 'dashed') {
       const pts = path.curve.getPoints(style.tubeSegments);
       const lm = new THREE.LineDashedMaterial({ color, dashSize: style.dashSize, gapSize: style.gapSize });
       const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lm);
       line.computeLineDistances();
       group.add(line);
-      fade = fader([], [lm as unknown as THREE.LineBasicMaterial], color);
+      look = fader([], [lm as unknown as THREE.LineBasicMaterial], color);
     } else {
       const mm = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 1 });
       group.add(new THREE.Mesh(new THREE.TubeGeometry(path.curve, style.tubeSegments, style.tubeRadius, style.tubeRadial), mm));
-      fade = fader([mm], []);
+      look = fader([mm], []);
     }
     const proxy = new THREE.Mesh(new THREE.TubeGeometry(path.curve, style.tubeSegments / 2, style.pickRadius, 4), pickMaterial);
     proxy.userData.id = f.id;
@@ -36,7 +36,7 @@ export function buildConduits(): Conduit[] {
     group.add(proxy);
     // A flow belongs to the model envelope only when both ends are inside it.
     const level = componentById.get(f.from)?.level === 'model' && componentById.get(f.to)?.level === 'model' ? 'model' : 'loop';
-    out.push({ id: f.id, level, object: group, pickables: [proxy], setWire: (w) => fade(w * 0.6), path });
+    out.push({ id: f.id, level, object: group, pickables: [proxy], setWire: (w) => look.setWire(w * 0.6), setDim: look.setDim, setGlow: look.setGlow, path });
   }
   return out;
 }
