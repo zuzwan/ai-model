@@ -1,0 +1,1135 @@
+{
+ "components": [
+  {
+   "id": "L1",
+   "level": "loop",
+   "kind": "chamber",
+   "name": "Data intake",
+   "stocks": [
+    "corpus_human",
+    "corpus_synthetic"
+   ],
+   "derived": [
+    "intake_rate",
+    "license_cost"
+   ],
+   "layout": {
+    "x": -1.15,
+    "y": 1.15,
+    "z": 0.15,
+    "w": 0.3,
+    "h": 0.55,
+    "d": 0.3,
+    "shape": "cylinder",
+    "rest": 0.7
+   }
+  },
+  {
+   "id": "L2",
+   "level": "loop",
+   "kind": "chamber",
+   "name": "Training pipeline",
+   "stocks": [
+    "train_progress",
+    "epochs"
+   ],
+   "derived": [
+    "train_active",
+    "corpus_quality"
+   ],
+   "layout": {
+    "x": -0.68,
+    "y": 1.0,
+    "z": 0.1,
+    "w": 0.36,
+    "h": 0.4,
+    "d": 0.4,
+    "shape": "box",
+    "rest": 0.4
+   }
+  },
+  {
+   "id": "L3",
+   "level": "loop",
+   "kind": "chamber",
+   "name": "Compute pool",
+   "stocks": [
+    "capacity"
+   ],
+   "derived": [
+    "utilization",
+    "depreciation_rate",
+    "energy_draw"
+   ],
+   "layout": {
+    "x": 0,
+    "y": 0.28,
+    "z": 0.1,
+    "w": 1.0,
+    "h": 0.32,
+    "d": 0.55,
+    "shape": "box",
+    "rest": 0.6
+   }
+  },
+  {
+   "id": "L4",
+   "level": "loop",
+   "kind": "chamber",
+   "name": "Deployment surface",
+   "stocks": [
+    "consumer.request_rate",
+    "enterprise.request_rate"
+   ],
+   "derived": [
+    "consumer.price_per_token",
+    "enterprise.price_per_token",
+    "latency",
+    "uptime"
+   ],
+   "layout": {
+    "x": 1.12,
+    "y": 1.0,
+    "z": 0.15,
+    "w": 0.38,
+    "h": 0.62,
+    "d": 0.62,
+    "shape": "box",
+    "rest": 0.5,
+    "channels": 2
+   }
+  },
+  {
+   "id": "L5",
+   "level": "loop",
+   "kind": "chamber",
+   "name": "Treasury",
+   "stocks": [
+    "reserve"
+   ],
+   "derived": [
+    "burn_rate",
+    "revenue_rate",
+    "runway"
+   ],
+   "layout": {
+    "x": 0,
+    "y": 1.72,
+    "z": 0.1,
+    "w": 0.8,
+    "h": 0.3,
+    "d": 0.45,
+    "shape": "box",
+    "rest": 0.55
+   }
+  },
+  {
+   "id": "L6",
+   "level": "loop",
+   "kind": "chamber",
+   "name": "Evaluation and reward",
+   "stocks": [
+    "benchmark_score"
+   ],
+   "derived": [
+    "reward_model_bias",
+    "eval_coverage",
+    "w_usage",
+    "w_usefulness",
+    "w_safety"
+   ],
+   "layout": {
+    "x": -0.95,
+    "y": 1.32,
+    "z": -0.56,
+    "w": 0.34,
+    "h": 0.4,
+    "d": 0.26,
+    "shape": "box",
+    "rest": 0.5
+   }
+  },
+  {
+   "id": "L7",
+   "level": "loop",
+   "kind": "chamber",
+   "name": "Decision chain",
+   "stocks": [],
+   "derived": [
+    "allocation_vector",
+    "deprecate_flag",
+    "release_flag"
+   ],
+   "layout": {
+    "x": -0.32,
+    "y": 1.32,
+    "z": -0.56,
+    "w": 0.34,
+    "h": 0.4,
+    "d": 0.26,
+    "shape": "box",
+    "rest": 0.3
+   }
+  },
+  {
+   "id": "L8",
+   "level": "loop",
+   "kind": "chamber",
+   "name": "Safety and policy layer",
+   "stocks": [
+    "incident_count"
+   ],
+   "derived": [
+    "filter_strength",
+    "refusal_rate"
+   ],
+   "layout": {
+    "x": 0.32,
+    "y": 1.32,
+    "z": -0.56,
+    "w": 0.34,
+    "h": 0.4,
+    "d": 0.26,
+    "shape": "box",
+    "rest": 0.4
+   }
+  },
+  {
+   "id": "L9",
+   "level": "loop",
+   "kind": "chamber",
+   "name": "Legitimacy reserve",
+   "stocks": [
+    "legitimacy"
+   ],
+   "derived": [
+    "decay_rate",
+    "incident_damage"
+   ],
+   "layout": {
+    "x": 0.95,
+    "y": 1.32,
+    "z": -0.56,
+    "w": 0.3,
+    "h": 0.4,
+    "d": 0.3,
+    "shape": "cylinder",
+    "rest": 0.8
+   }
+  },
+  {
+   "id": "L10",
+   "level": "loop",
+   "kind": "chamber",
+   "name": "Generation archive",
+   "stocks": [
+    "generations"
+   ],
+   "derived": [
+    "active_generation",
+    "distill_queue"
+   ],
+   "layout": {
+    "x": -0.85,
+    "y": 0.32,
+    "z": -0.5,
+    "w": 0.5,
+    "h": 0.28,
+    "d": 0.3,
+    "shape": "box",
+    "rest": 0.2
+   }
+  },
+  {
+   "id": "L11",
+   "level": "loop",
+   "kind": "chamber",
+   "name": "Staff and tacit know-how",
+   "stocks": [
+    "headcount",
+    "know_how"
+   ],
+   "derived": [
+    "retention"
+   ],
+   "layout": {
+    "x": 0.85,
+    "y": 0.32,
+    "z": -0.5,
+    "w": 0.45,
+    "h": 0.28,
+    "d": 0.3,
+    "shape": "box",
+    "rest": 0.6
+   }
+  },
+  {
+   "id": "M1",
+   "level": "model",
+   "kind": "chamber",
+   "name": "Weights",
+   "stocks": [
+    "capability",
+    "alignment_to_usefulness",
+    "alignment_to_usage",
+    "contamination_load"
+   ],
+   "derived": [
+    "age"
+   ],
+   "layout": {
+    "x": 0,
+    "y": 0.98,
+    "z": 0.12,
+    "w": 0.62,
+    "h": 0.26,
+    "d": 0.42,
+    "shape": "slab",
+    "rest": 0.5
+   }
+  },
+  {
+   "id": "M2",
+   "level": "model",
+   "kind": "conduit",
+   "name": "Inference engine",
+   "stocks": [
+    "queue_depth"
+   ],
+   "derived": [
+    "tokens_per_second",
+    "energy_per_token"
+   ],
+   "layout": {
+    "x": 0.05,
+    "y": 0.98,
+    "z": 0.12,
+    "w": 0.96,
+    "h": 0.09,
+    "d": 0.09,
+    "shape": "tube",
+    "rest": 0,
+    "axis": "x"
+   }
+  },
+  {
+   "id": "M3",
+   "level": "model",
+   "kind": "chamber",
+   "name": "Context window",
+   "stocks": [
+    "occupancy"
+   ],
+   "derived": [
+    "retention"
+   ],
+   "layout": {
+    "x": -0.05,
+    "y": 1.24,
+    "z": 0.12,
+    "w": 0.44,
+    "h": 0.05,
+    "d": 0.3,
+    "shape": "tray",
+    "rest": 0
+   }
+  },
+  {
+   "id": "M4",
+   "level": "model",
+   "kind": "chamber",
+   "name": "Sampling interface",
+   "stocks": [],
+   "derived": [
+    "temperature",
+    "system_program",
+    "refusal_hooks"
+   ],
+   "layout": {
+    "x": 0.5,
+    "y": 0.98,
+    "z": 0.12,
+    "w": 0.03,
+    "h": 0.16,
+    "d": 0.16,
+    "shape": "ring",
+    "rest": 0,
+    "axis": "x"
+   }
+  },
+  {
+   "id": "E1",
+   "level": "env",
+   "kind": "field",
+   "name": "Users",
+   "stocks": [
+    "consumer.demand",
+    "enterprise.demand",
+    "consumer.dependence",
+    "enterprise.dependence"
+   ],
+   "derived": [
+    "consumer.satisfaction",
+    "enterprise.satisfaction",
+    "consumer.willingness_to_pay",
+    "enterprise.willingness_to_pay"
+   ],
+   "layout": {
+    "x": 2.35,
+    "y": 0.0,
+    "z": 0.15,
+    "w": 1.1,
+    "h": 0.02,
+    "d": 1.4,
+    "shape": "plane",
+    "normal": [
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "id": "E2",
+   "level": "env",
+   "kind": "field",
+   "name": "Data commons",
+   "stocks": [
+    "synthetic_fraction"
+   ],
+   "derived": [
+    "human_expression_rate",
+    "accessibility"
+   ],
+   "layout": {
+    "x": -2.35,
+    "y": 0.0,
+    "z": 0.15,
+    "w": 1.1,
+    "h": 0.02,
+    "d": 1.4,
+    "shape": "plane",
+    "normal": [
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "id": "E3",
+   "level": "env",
+   "kind": "field",
+   "name": "Capital markets",
+   "stocks": [
+    "capital_available"
+   ],
+   "derived": [
+    "cost_of_capital",
+    "patience"
+   ],
+   "layout": {
+    "x": 0,
+    "y": 2.75,
+    "z": 0.1,
+    "w": 1.4,
+    "h": 0.02,
+    "d": 1.0,
+    "shape": "plane",
+    "normal": [
+     0,
+     -1,
+     0
+    ]
+   }
+  },
+  {
+   "id": "E4",
+   "level": "env",
+   "kind": "field",
+   "name": "Regulators and public",
+   "stocks": [
+    "scrutiny",
+    "rule_set"
+   ],
+   "derived": [
+    "tolerance"
+   ],
+   "layout": {
+    "x": 0.2,
+    "y": 0.0,
+    "z": -1.75,
+    "w": 1.8,
+    "h": 0.02,
+    "d": 1.0,
+    "shape": "plane",
+    "normal": [
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "id": "E5",
+   "level": "env",
+   "kind": "field",
+   "name": "Energy grid",
+   "stocks": [],
+   "derived": [
+    "electricity_price",
+    "availability",
+    "carbon_constraint"
+   ],
+   "layout": {
+    "x": 0,
+    "y": -0.55,
+    "z": 0.1,
+    "w": 1.6,
+    "h": 0.02,
+    "d": 1.1,
+    "shape": "plane",
+    "normal": [
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "id": "E6",
+   "level": "env",
+   "kind": "field",
+   "name": "Competitors",
+   "stocks": [
+    "best_rival_capability"
+   ],
+   "derived": [
+    "release_cadence"
+   ],
+   "layout": {
+    "x": 3.2,
+    "y": 1.1,
+    "z": 0.3,
+    "w": 0.8,
+    "h": 1.6,
+    "d": 2.0,
+    "shape": "cloud"
+   }
+  }
+ ],
+ "envelopes": [
+  {
+   "id": "loop",
+   "layout": {
+    "x": 0,
+    "y": 1,
+    "z": 0,
+    "w": 3,
+    "h": 2,
+    "d": 1.5,
+    "shape": "prism",
+    "radius": 0.08
+   }
+  },
+  {
+   "id": "model",
+   "layout": {
+    "x": 0.05,
+    "y": 1.0,
+    "z": 0.12,
+    "w": 1.0,
+    "h": 0.72,
+    "d": 0.62,
+    "shape": "prism",
+    "radius": 0.04
+   }
+  }
+ ],
+ "sinks": [
+  {
+   "id": "sink",
+   "layout": {
+    "x": 0,
+    "y": -1.0,
+    "z": 0.1
+   }
+  }
+ ],
+ "substances": [
+  {
+   "id": "data",
+   "particle": {
+    "color": "#7a7a7a",
+    "size": 0.022,
+    "speed": 0.35,
+    "cap": 4000
+   },
+   "conduit": {
+    "color": "#9a9a9a",
+    "style": "tube"
+   }
+  },
+  {
+   "id": "compute",
+   "particle": {
+    "color": "#b4b4b4",
+    "size": 0.01,
+    "speed": 1.2,
+    "cap": 4000
+   },
+   "conduit": {
+    "color": "#c4c4c4",
+    "style": "tube"
+   }
+  },
+  {
+   "id": "currency",
+   "particle": {
+    "color": "#F2A900",
+    "size": 0.026,
+    "speed": 0.5,
+    "cap": 4000
+   },
+   "conduit": {
+    "color": "#b8b8b8",
+    "style": "tube"
+   }
+  },
+  {
+   "id": "prompts",
+   "particle": {
+    "color": "#000000",
+    "size": 0.014,
+    "speed": 0.9,
+    "cap": 4000
+   },
+   "conduit": {
+    "color": "#3c3c3c",
+    "style": "tube"
+   }
+  },
+  {
+   "id": "signals",
+   "particle": {
+    "color": "#6e6e6e",
+    "size": 0.012,
+    "speed": 0.7,
+    "cap": 4000
+   },
+   "conduit": {
+    "color": "#8a8a8a",
+    "style": "dashed"
+   }
+  },
+  {
+   "id": "weights",
+   "particle": {
+    "color": "#2a2a2a",
+    "size": 0.03,
+    "speed": 0.25,
+    "cap": 4000
+   },
+   "conduit": {
+    "color": "#505050",
+    "style": "tube"
+   }
+  },
+  {
+   "id": "heat",
+   "particle": {
+    "color": "#d0d0d0",
+    "size": 0.016,
+    "speed": 0.15,
+    "cap": 4000
+   },
+   "conduit": {
+    "color": "#e0e0e0",
+    "style": "none"
+   }
+  }
+ ],
+ "surfaces": [
+  {
+   "id": "S1",
+   "name": "Deployment",
+   "env": "E1",
+   "loopComponent": [
+    "L4"
+   ],
+   "apertureDriver": "legitimacy_gate*uptime",
+   "apertures": [
+    "consumer",
+    "enterprise"
+   ],
+   "inbound": [
+    "F8",
+    "F14"
+   ],
+   "outbound": [
+    "F13"
+   ],
+   "layout": {
+    "face": "+x",
+    "x": 1.5,
+    "y": 1.0,
+    "z": 0.15,
+    "w": 0.5,
+    "h": 0.55,
+    "rest": 0.6,
+    "membrane": true
+   }
+  },
+  {
+   "id": "S2",
+   "name": "Ingestion",
+   "env": "E2",
+   "loopComponent": [
+    "L1"
+   ],
+   "apertureDriver": "accessibility*license_spend",
+   "apertures": [
+    "main"
+   ],
+   "inbound": [
+    "F1"
+   ],
+   "outbound": [
+    "F2"
+   ],
+   "layout": {
+    "face": "-x",
+    "x": -1.5,
+    "y": 1.15,
+    "z": 0.15,
+    "w": 0.45,
+    "h": 0.4,
+    "rest": 0.6,
+    "membrane": true
+   }
+  },
+  {
+   "id": "S3",
+   "name": "Capital",
+   "env": "E3",
+   "loopComponent": [
+    "L5"
+   ],
+   "apertureDriver": "patience*growth",
+   "apertures": [
+    "main"
+   ],
+   "inbound": [
+    "F15"
+   ],
+   "outbound": [],
+   "layout": {
+    "face": "+y",
+    "x": 0,
+    "y": 2,
+    "z": 0.1,
+    "w": 0.5,
+    "h": 0.35,
+    "rest": 0.6,
+    "membrane": true
+   }
+  },
+  {
+   "id": "S4",
+   "name": "Compliance",
+   "env": "E4",
+   "loopComponent": [
+    "L9",
+    "L7"
+   ],
+   "apertureDriver": "scrutiny",
+   "apertures": [
+    "main"
+   ],
+   "inbound": [
+    "F29"
+   ],
+   "outbound": [],
+   "layout": {
+    "face": "-z",
+    "x": 0.3,
+    "y": 1.3,
+    "z": -0.75,
+    "w": 0.6,
+    "h": 0.35,
+    "rest": 0.5,
+    "membrane": true
+   }
+  },
+  {
+   "id": "S5",
+   "name": "Power",
+   "env": "E5",
+   "loopComponent": [
+    "L3"
+   ],
+   "apertureDriver": "availability",
+   "apertures": [
+    "main"
+   ],
+   "inbound": [
+    "F4"
+   ],
+   "outbound": [
+    "F34"
+   ],
+   "layout": {
+    "face": "-y",
+    "x": 0,
+    "y": 0,
+    "z": 0.1,
+    "w": 0.5,
+    "h": 0.35,
+    "rest": 0.8,
+    "membrane": true
+   }
+  },
+  {
+   "id": "S6",
+   "name": "Selection",
+   "env": "E6",
+   "loopComponent": [
+    "L6"
+   ],
+   "apertureDriver": "none",
+   "apertures": [],
+   "inbound": [
+    "F32"
+   ],
+   "outbound": [],
+   "layout": {
+    "face": "+x",
+    "x": 1.5,
+    "y": 1.8,
+    "z": -0.45,
+    "w": 0.2,
+    "h": 0.2,
+    "rest": 1,
+    "membrane": false
+   }
+  }
+ ],
+ "flows": [
+  {
+   "id": "F1",
+   "from": "E2",
+   "to": "L1",
+   "substance": "data",
+   "rateFn": "F1",
+   "valveable": true,
+   "renders": true,
+   "surface": "S2"
+  },
+  {
+   "id": "F2",
+   "from": "M2",
+   "to": "E2",
+   "substance": "data",
+   "rateFn": "F2",
+   "valveable": true,
+   "renders": true,
+   "surface": "S2"
+  },
+  {
+   "id": "F3",
+   "from": "L1",
+   "to": "L2",
+   "substance": "data",
+   "rateFn": "F3",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F4",
+   "from": "E5",
+   "to": "L3",
+   "substance": "compute",
+   "rateFn": "F4",
+   "valveable": true,
+   "renders": true,
+   "surface": "S5"
+  },
+  {
+   "id": "F5",
+   "from": "L3",
+   "to": "L2",
+   "substance": "compute",
+   "rateFn": "F5",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F6",
+   "from": "L3",
+   "to": "M2",
+   "substance": "compute",
+   "rateFn": "F6",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F7",
+   "from": "L2",
+   "to": "M1",
+   "substance": "weights",
+   "rateFn": "F7",
+   "valveable": false,
+   "renders": true
+  },
+  {
+   "id": "F8",
+   "from": "E1",
+   "to": "L4",
+   "substance": "prompts",
+   "rateFn": "F8",
+   "valveable": true,
+   "renders": true,
+   "surface": "S1"
+  },
+  {
+   "id": "F9",
+   "from": "L4",
+   "to": "L8",
+   "substance": "prompts",
+   "rateFn": "F9",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F10",
+   "from": "L8",
+   "to": "M3",
+   "substance": "prompts",
+   "rateFn": "F10",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F11",
+   "from": "M3",
+   "to": "M2",
+   "substance": "prompts",
+   "rateFn": "F11",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F12",
+   "from": "M2",
+   "to": "L4",
+   "substance": "prompts",
+   "rateFn": "F12",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F13",
+   "from": "L4",
+   "to": "E1",
+   "substance": "prompts",
+   "rateFn": "F13",
+   "valveable": true,
+   "renders": true,
+   "surface": "S1"
+  },
+  {
+   "id": "F14",
+   "from": "E1",
+   "to": "L5",
+   "substance": "currency",
+   "rateFn": "F14",
+   "valveable": true,
+   "renders": true,
+   "surface": "S1"
+  },
+  {
+   "id": "F15",
+   "from": "E3",
+   "to": "L5",
+   "substance": "currency",
+   "rateFn": "F15",
+   "valveable": true,
+   "renders": true,
+   "surface": "S3"
+  },
+  {
+   "id": "F16",
+   "from": "L5",
+   "to": "L3",
+   "substance": "currency",
+   "rateFn": "F16",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F17",
+   "from": "L5",
+   "to": "L1",
+   "substance": "currency",
+   "rateFn": "F17",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F18",
+   "from": "L5",
+   "to": "L8",
+   "substance": "currency",
+   "rateFn": "F18",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F19",
+   "from": "L5",
+   "to": "L9",
+   "substance": "currency",
+   "rateFn": "F19",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F20",
+   "from": "L5",
+   "to": "L11",
+   "substance": "currency",
+   "rateFn": "F20",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F21",
+   "from": "M2",
+   "to": "L6",
+   "substance": "prompts",
+   "rateFn": "F21",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F22",
+   "from": "L4",
+   "to": "L6",
+   "substance": "signals",
+   "rateFn": "F22",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F23",
+   "from": "L6",
+   "to": "L7",
+   "substance": "signals",
+   "rateFn": "F23",
+   "valveable": false,
+   "renders": true
+  },
+  {
+   "id": "F24",
+   "from": "L6",
+   "to": "L2",
+   "substance": "signals",
+   "rateFn": "F24",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F25",
+   "from": "L7",
+   "to": "L5",
+   "substance": "signals",
+   "rateFn": "F25",
+   "valveable": false,
+   "renders": true
+  },
+  {
+   "id": "F26",
+   "from": "L7",
+   "to": "M4",
+   "substance": "signals",
+   "rateFn": "F26",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F27",
+   "from": "L7",
+   "to": "L10",
+   "substance": "weights",
+   "rateFn": "F27",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F28",
+   "from": "L10",
+   "to": "L2",
+   "substance": "weights",
+   "rateFn": "F28",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F29",
+   "from": "E4",
+   "to": "L9",
+   "substance": "signals",
+   "rateFn": "F29",
+   "valveable": true,
+   "renders": true,
+   "surface": "S4"
+  },
+  {
+   "id": "F30",
+   "from": "L8",
+   "to": "L9",
+   "substance": "signals",
+   "rateFn": "F30",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F31",
+   "from": "L9",
+   "to": "L4",
+   "substance": "signals",
+   "rateFn": "F31",
+   "valveable": false,
+   "renders": true
+  },
+  {
+   "id": "F32",
+   "from": "E6",
+   "to": "L6",
+   "substance": "signals",
+   "rateFn": "F32",
+   "valveable": true,
+   "renders": true,
+   "surface": "S6"
+  },
+  {
+   "id": "F33",
+   "from": "E6",
+   "to": "E1",
+   "substance": "signals",
+   "rateFn": "F33",
+   "valveable": true,
+   "renders": true
+  },
+  {
+   "id": "F34",
+   "from": "L3",
+   "to": "sink",
+   "substance": "heat",
+   "rateFn": "F34",
+   "valveable": false,
+   "renders": false,
+   "surface": "S5"
+  }
+ ]
+}
