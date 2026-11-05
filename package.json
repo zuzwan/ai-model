@@ -8,7 +8,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "trace": "vite-node scripts/trace.ts"
   },
   "dependencies": {
     "three": "0.187.0"
@@ -17,6 +18,7 @@
     "@types/three": "^0.187.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.6",
+    "vite-node": "^6.0.0",
     "vitest": "^5.1.0"
   }
 }

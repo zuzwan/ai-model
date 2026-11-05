@@ -1,0 +1,13 @@
+{
+  "id": "baseline",
+  "name": "Baseline",
+  "seed": 0,
+  "paramOverrides": {},
+  "startOverrides": {},
+  "expect": [
+    { "var": "alive", "at": 1500, "op": "==", "value": 1, "tol": 0 },
+    { "var": "Lambda", "at": 1500, "op": ">", "value": 0.3, "tol": 0 },
+    { "var": "R", "at": 1500, "op": ">", "value": 0, "tol": 0 },
+    { "var": "deprecations", "at": 1500, "op": "==", "value": 0, "tol": 0 }
+  ]
+}
