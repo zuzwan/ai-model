@@ -10,8 +10,9 @@ import { buildEnvelopes } from './envelopes';
 import { buildMembranes, type Membrane } from './membranes';
 import { buildConduits } from './conduits';
 import { FlowParticles, HeatParticles, makeTrack } from './particles';
-import { Traces } from './traces';
-import type { Part } from './part';
+import { Traces, HiddenPanel } from './traces';
+import { type Part, pickMaterial } from './part';
+import { buildFlowPaths } from './layout';
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
@@ -41,6 +42,8 @@ function fillValue(s: State, id: FillVar): number[] {
 /** Which flow drives each chamber's pulse. */
 const PULSE: Record<string, string[]> = { L2: ['F5'], L4: ['F8'], L6: ['F21', 'F22'], L7: ['F23', 'F25'], M2: ['F12'] };
 
+const UNREGISTERED = new Set(ontology.umwelt.unregistered);
+
 const MODEL_FLOWS = new Set(
   ontology.flows.filter((f) => componentById.get(f.from)?.level === 'model' || componentById.get(f.to)?.level === 'model').map((f) => f.id),
 );
@@ -64,6 +67,18 @@ export class OrganismView {
   private depTarget = 0;
   private cur?: State;
   private lastT = -1;
+  private umwelt = 0;
+  private umweltTarget = 0;
+  readonly hidden = new HiddenPanel(pickMaterial);
+  private rings = new Map<string, { group: THREE.Group; arc: THREE.Mesh; gain: number }>();
+  private paths = buildFlowPaths();
+  private triangle: THREE.Group;
+  private triMarker: THREE.Mesh;
+  private triLines: THREE.LineBasicMaterial;
+  readonly triPlane: { center: THREE.Vector3; verts: THREE.Vector3[] };
+  private selected: string | null = null;
+  /** Viewer aperture settings per surface (0..1 per aperture), multiplied into the driven width. */
+  viewerApertures: Record<string, number[]> = {};
 
   constructor(readonly refs: Record<string, number>) {
     const envelopes = buildEnvelopes();
@@ -101,7 +116,111 @@ export class OrganismView {
     this.archiveMat = new THREE.LineBasicMaterial({ color: style.archive.color });
     this.archive = new THREE.LineSegments(new THREE.BufferGeometry(), this.archiveMat);
     this.group.add(this.archive);
+    this.group.add(this.hidden.group);
+
+    // The objective triangle on L6's outer face, read from the back view (8):
+    // w_usage lower left, w_usefulness lower right, w_safety top.
+    const L6 = componentById.get('L6')!.layout;
+    const T = style.triangle;
+    const center = new THREE.Vector3(L6.x, L6.y, L6.z - L6.d / 2 - 0.003);
+    const verts = [210, 330, 90].map((deg) => {
+      const a = (deg * Math.PI) / 180;
+      // Seen from behind, screen right is -x.
+      return new THREE.Vector3(center.x - T.radius * Math.cos(a), center.y + T.radius * Math.sin(a), center.z);
+    });
+    this.triPlane = { center, verts };
+    this.triangle = new THREE.Group();
+    this.triLines = new THREE.LineBasicMaterial({ color: T.lineColor });
+    const tg = new THREE.BufferGeometry().setFromPoints([verts[0], verts[1], verts[2], verts[0]]);
+    this.triangle.add(new THREE.Line(tg, this.triLines));
+    this.triMarker = new THREE.Mesh(new THREE.CircleGeometry(T.marker, 20), new THREE.MeshBasicMaterial({ color: T.color, side: THREE.DoubleSide }));
+    this.triangle.add(this.triMarker);
+    const triProxy = new THREE.Mesh(new THREE.CircleGeometry(T.radius * 1.15, 3, Math.PI / 2), pickMaterial);
+    triProxy.position.copy(center);
+    triProxy.userData.id = 'L6.objective';
+    triProxy.userData.pick = 'ring';
+    this.triangle.add(triProxy);
+    this.triProxy = triProxy;
+    this.group.add(this.triangle);
   }
+
+  readonly triProxy: THREE.Mesh;
+
+  /** Pickables including the interactive overlays. */
+  pickables(): THREE.Object3D[] {
+    const out = this.parts.flatMap((p) => p.pickables);
+    out.push(this.triProxy);
+    if (this.hidden.group.visible) out.push(this.hidden.proxy);
+    return out;
+  }
+
+  /** Barycentric weights (u, v, s) for a point on the triangle's plane, clamped to the simplex. */
+  weightsAt(p: THREE.Vector3): [number, number, number] {
+    const [a, b, c] = this.triPlane.verts;
+    const v0 = b.clone().sub(a), v1 = c.clone().sub(a), v2 = p.clone().sub(a);
+    const d00 = v0.dot(v0), d01 = v0.dot(v1), d11 = v1.dot(v1), d20 = v2.dot(v0), d21 = v2.dot(v1);
+    const den = d00 * d11 - d01 * d01;
+    let wv = (d11 * d20 - d01 * d21) / den;
+    let ws = (d00 * d21 - d01 * d20) / den;
+    let wu = 1 - wv - ws;
+    wu = Math.max(0, wu); wv = Math.max(0, wv); ws = Math.max(0, ws);
+    const sum = wu + wv + ws || 1;
+    return [wu / sum, wv / sum, ws / sum];
+  }
+
+  private placeMarker(s: State) {
+    const [a, b, c] = this.triPlane.verts;
+    const p = a.clone().multiplyScalar(s.L6.w_usage).addScaledVector(b, s.L6.w_usefulness).addScaledVector(c, s.L6.w_safety);
+    this.triMarker.position.set(p.x, p.y, p.z - 0.001);
+  }
+
+  setValve(id: string, gain: number) {
+    let r = this.rings.get(id);
+    const R = style.valveRing;
+    if (!r) {
+      const path = this.paths.get(id);
+      if (!path) return;
+      const group = new THREE.Group();
+      const mid = path.curve.getPointAt(0.5);
+      const tan = path.curve.getTangentAt(0.5);
+      group.position.copy(mid);
+      group.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), tan.normalize());
+      const ref = new THREE.Mesh(new THREE.TorusGeometry(R.radius, R.tube * 0.5, 6, 48), new THREE.MeshBasicMaterial({ color: '#000', transparent: true, opacity: R.refOpacity }));
+      group.add(ref);
+      const arc = new THREE.Mesh(new THREE.TorusGeometry(R.radius, R.tube, 6, 48, Math.PI * 2), new THREE.MeshBasicMaterial({ color: '#000' }));
+      group.add(arc);
+      const proxy = new THREE.Mesh(new THREE.SphereGeometry(R.radius * 1.4, 8, 8), pickMaterial);
+      proxy.userData.id = id;
+      proxy.userData.pick = 'ring';
+      group.add(proxy);
+      this.group.add(group);
+      r = { group, arc, gain: -1 };
+      this.rings.set(id, r);
+      const conduit = this.parts.find((p) => p.id === id);
+      conduit?.pickables.push(proxy);
+    }
+    if (r.gain === gain) return;
+    r.gain = gain;
+    // The ring's arc shows the gain: a full circle is 2x, half a circle is 1x (unchanged).
+    r.arc.geometry.dispose();
+    r.arc.geometry = new THREE.TorusGeometry(R.radius, R.tube, 6, 48, Math.max(0.001, (gain / 2) * Math.PI * 2));
+    r.group.visible = gain !== 1 || this.selected === id;
+  }
+
+  setSelected(id: string | null) {
+    if (this.selected === id) return;
+    const prev = this.selected;
+    this.selected = id;
+    for (const p of this.parts) p.setAccent(p.id === id);
+    this.triLines.color.set(id === 'L6.objective' ? style.accent : style.triangle.lineColor);
+    for (const k of [prev, id]) {
+      const r = k ? this.rings.get(k) : undefined;
+      if (r) r.group.visible = r.gain !== 1 || this.selected === k;
+    }
+    if (id && /^F\d+$/.test(id) && !this.rings.has(id)) this.setValve(id, 1);
+  }
+
+  setUmwelt(on: boolean) { this.umweltTarget = on ? 1 : 0; this.hidden.group.visible = on; }
 
   /** Particle size is in world units; the shader needs the projection scale in pixels. */
   setViewport(heightPx: number, fovDeg: number) {
@@ -141,7 +260,8 @@ export class OrganismView {
     const apB = ap(cur);
     for (const [id, m] of this.membranes) {
       const key = id as keyof typeof apB;
-      apB[key].forEach((v, i) => m.setAperture(i, lerp(apA[key][i], v, alpha)));
+      const va = this.viewerApertures[id] ?? [];
+      apB[key].forEach((v, i) => m.setAperture(i, lerp(apA[key][i], v, alpha) * (va[i] ?? 1)));
     }
 
     // Model chambers have no pulse of their own: they light only when a flow passes through them.
@@ -151,6 +271,8 @@ export class OrganismView {
     this.chambers.get('M4')?.setGlow(style.glow.modelFlow * norm('F12') * (cur.M4.temperature / 1));
 
     this.depTarget = cur.L7.deprecate_flag || !cur.alive ? 1 : 0;
+
+    this.placeMarker(cur);
 
     // Archive marks.
     const gens = cur.L10.generations.length;
@@ -195,11 +317,18 @@ export class OrganismView {
     // Deprecation fades the model envelope over the standard fade.
     const fade = dt * 1000 / style.deprecationFadeMs;
     this.dep = this.dep < this.depTarget ? Math.min(this.depTarget, this.dep + fade) : Math.max(this.depTarget, this.dep - fade);
+    this.umwelt = this.umwelt < this.umweltTarget ? Math.min(this.umweltTarget, this.umwelt + fade) : Math.max(this.umweltTarget, this.umwelt - fade);
+    const U = ontology.umwelt;
+    const umDim = ((1 - U.dimTo) / style.dimAmount) * this.umwelt;
     for (const p of this.parts) {
       const model = p.level === 'model' || p.envelopeOf === 'model';
-      if (model) p.setDim(this.dep);
+      const hiddenFromLoop = UNREGISTERED.has(p.id);
+      p.setDim(Math.max(model ? this.dep : 0, hiddenFromLoop ? umDim : 0));
     }
-    this.traces.setOpacity(1 - style.dimAmount * this.dep);
+    const traceKeep = 1 - style.dimAmount * this.dep;
+    this.traces.setOpacities(traceKeep, traceKeep * (1 - (1 - U.dimTo) * this.umwelt));
+    for (const [id, t] of this.trackOf) t.sys.setTrackAlpha(t.i, UNREGISTERED.has(id) ? 1 - (1 - U.dimTo) * this.umwelt : 1);
+    this.heat.material.uniforms.uOpacity.value = UNREGISTERED.has('F34') ? 1 - (1 - U.dimTo) * this.umwelt : 1;
     for (const [id, t] of this.trackOf) if (MODEL_FLOWS.has(id)) t.sys.setFrozen(t.i, this.dep > 0.5);
 
     // Generation flash on the weights slab.

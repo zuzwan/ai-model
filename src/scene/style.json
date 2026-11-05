@@ -223,5 +223,44 @@
     "maxMarks": 40,
     "markHeight": 0.12,
     "color": "#000000"
+  },
+  "accent": "#F2A900",
+  "valveRing": {
+    "radius": 0.035,
+    "tube": 0.004,
+    "refOpacity": 0.25
+  },
+  "triangle": {
+    "radius": 0.12,
+    "marker": 0.012,
+    "color": "#000000",
+    "lineColor": "#6e6e6e"
+  },
+  "hiddenPanel": {
+    "x0": 1.8,
+    "x1": 2.9,
+    "y0": 1.45,
+    "y1": 2.15,
+    "z": 0.95,
+    "window": 480,
+    "colors": {
+      "V": "#000000",
+      "G": "#5a5a5a",
+      "D": "#a8a8a8"
+    },
+    "ranges": {
+      "V": [
+        0,
+        1
+      ],
+      "G": [
+        -0.5,
+        1
+      ],
+      "D": [
+        0,
+        1
+      ]
+    }
   }
 }

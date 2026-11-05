@@ -66,6 +66,8 @@ export interface Ontology {
   substances: Substance[];
   surfaces: Surface[];
   flows: Flow[];
+  /** What the loop cannot register: dimmed in the Umwelt view. */
+  umwelt: { unregistered: string[]; hiddenTraces: string[]; dimTo: number };
 }
 
 export const ontology = raw as unknown as Ontology;

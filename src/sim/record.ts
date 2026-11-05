@@ -23,6 +23,13 @@ export class Record {
     const i = t - this.firstT;
     if (i >= 0 && i < this.states.length - 1) this.states.length = i + 1;
   }
+  /** Replace the stored state at tick t (a viewer perturbation). Drops anything after t. */
+  replace(t: number, s: State): void {
+    const i = t - this.firstT;
+    if (i < 0 || i >= this.states.length) throw new Error(`tick ${t} not in record`);
+    this.states.length = i + 1;
+    this.states[i] = s;
+  }
   /** A copy of the state at tick t with a new random stream. */
   fork(t: number, seed: number): State | undefined {
     const s = this.at(t);

@@ -29,3 +29,21 @@ html, body { margin: 0; height: 100%; background: var(--paper); color: var(--ink
   transition: opacity var(--fade) linear;
 }
 .strip canvas { display: block; cursor: default; }
+
+.fade { position: fixed; inset: 0; background: var(--paper); opacity: 0; pointer-events: none; }
+.fade.cut { opacity: 1; transition: none; }
+.fade.out { opacity: 0; transition: opacity var(--fade) linear; }
+
+.menu {
+  position: fixed; top: 16px; right: 16px; max-width: calc(100vw - 32px);
+  background: var(--paper); border: 1px solid var(--ink); padding: 14px 18px;
+  font: 400 11px/1.6 'Lexend', sans-serif; color: var(--ink);
+  display: flex; gap: 28px; flex-wrap: wrap;
+  opacity: 0; pointer-events: none; transition: opacity var(--fade) linear;
+}
+.menu.open { opacity: 1; pointer-events: auto; }
+.menu dl { margin: 0; display: grid; grid-template-columns: auto auto; column-gap: 14px; }
+.menu dt { font-weight: 500; }
+.menu dd { margin: 0; }
+.menu button { all: unset; cursor: pointer; }
+.menu button:hover { color: var(--marigold); }

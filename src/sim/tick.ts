@@ -273,7 +273,8 @@ export function tick(prev: State, params: Params): State {
 
   // L6 objective drift (the want): selection pushes w_usage toward what raises usage.
   const dUdAu = CHANNELS.reduce((acc, c) => acc + s.E1[c].demand * p.E1.channels[c].beta, 0);
-  const wu0 = p.start.w.u;
+  // The anchor is where the objective was last set (by the build, or by the viewer); drift resumes from it.
+  const wu0 = s.L6.w_anchor;
   s.L6.w_usage = clamp(
     s.L6.w_usage + p.L6.eta * dUdAu * (1 - s.L6.w_safety) - p.L6.objective_anchor * (s.L6.w_usage - wu0),
     0, 1 - s.L6.w_safety);

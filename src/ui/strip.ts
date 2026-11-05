@@ -52,7 +52,8 @@ export class Strip {
     this.el.style.pointerEvents = this.visible ? 'auto' : 'none';
   }
 
-  draw(rec: StateRecord, viewT: number) {
+  /** Draw the primary branch; a fork, when present, is overlaid in grey with its fork point on the rail. */
+  draw(rec: StateRecord, viewT: number, fork?: StateRecord) {
     if (!this.visible) return;
     const dpr = Math.min(window.devicePixelRatio, 2);
     const W = this.el.clientWidth;
@@ -83,6 +84,8 @@ export class Strip {
     const cell = (W - x0 - g) / KEYS.length;
     const from = Math.max(rec.firstT, viewT - S.window);
     const series = rec.series(pick, from, viewT);
+    const forkSeries = fork ? fork.series(pick, Math.max(fork.firstT, from), Math.min(viewT, fork.headT)) : [];
+    const forkOffset = fork ? Math.max(fork.firstT, from) - from : 0;
     KEYS.forEach((k, i) => {
       const cx = x0 + i * cell;
       c.fillStyle = S.ink;
@@ -93,8 +96,19 @@ export class Strip {
       const sy = 6;
       const [lo, hi] = S.ranges[k] as [number, number];
       const vals = series.map((v) => v[k]);
-      const hiEff = k === 'R' || k === 'U' ? Math.max(hi * 0.25, ...vals) * 1.05 : hi;
+      const fvals = forkSeries.map((v) => v[k]);
+      const hiEff = k === 'R' || k === 'U' ? Math.max(hi * 0.25, ...vals, ...fvals) * 1.05 : hi;
       const y = (v: number) => sy + sh - ((Math.min(hiEff, Math.max(lo, v)) - lo) / (hiEff - lo)) * sh;
+      if (fvals.length) {
+        c.strokeStyle = S.grey;
+        c.lineWidth = S.lineWidth;
+        c.beginPath();
+        fvals.forEach((v, j) => {
+          const px = sx + ((j + forkOffset) / S.window) * sw;
+          if (j === 0) c.moveTo(px, y(v)); else c.lineTo(px, y(v));
+        });
+        c.stroke();
+      }
       c.strokeStyle = S.ink;
       c.lineWidth = S.lineWidth;
       c.beginPath();
@@ -124,5 +138,11 @@ export class Strip {
     c.beginPath(); c.moveTo(g, ry); c.lineTo(cx, ry); c.stroke();
     c.fillStyle = S.ink;
     c.fillRect(cx - 1, ry - 4, 2, 8);
+    if (fork) {
+      const fx = g + ((fork.firstT - rec.firstT) / span) * rw;
+      c.strokeStyle = S.ink;
+      c.lineWidth = 1;
+      c.beginPath(); c.moveTo(fx, ry - 4); c.lineTo(fx + 4, ry - 8); c.moveTo(fx, ry - 4); c.lineTo(fx + 4, ry); c.stroke();
+    }
   }
 }

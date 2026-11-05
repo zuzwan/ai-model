@@ -1138,5 +1138,23 @@
    "renders": false,
    "surface": "S5"
   }
- ]
+ ],
+ "umwelt": {
+  "unregistered": [
+   "E1",
+   "E2",
+   "E3",
+   "E5",
+   "F2",
+   "F13",
+   "F33",
+   "F34"
+  ],
+  "hiddenTraces": [
+   "V",
+   "G",
+   "D"
+  ],
+  "dimTo": 0.2
+ }
 }

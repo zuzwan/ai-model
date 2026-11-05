@@ -27,6 +27,7 @@ export function buildConduits(): Conduit[] {
       look = fader([], [lm as unknown as THREE.LineBasicMaterial], color);
     } else {
       const mm = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 1 });
+      mm.userData.tube = color.clone();
       group.add(new THREE.Mesh(new THREE.TubeGeometry(path.curve, style.tubeSegments, style.tubeRadius, style.tubeRadial), mm));
       look = fader([mm], []);
     }
@@ -36,7 +37,7 @@ export function buildConduits(): Conduit[] {
     group.add(proxy);
     // A flow belongs to the model envelope only when both ends are inside it.
     const level = componentById.get(f.from)?.level === 'model' && componentById.get(f.to)?.level === 'model' ? 'model' : 'loop';
-    out.push({ id: f.id, level, object: group, pickables: [proxy], setWire: (w) => look.setWire(w * 0.6), setDim: look.setDim, setGlow: look.setGlow, path });
+    out.push({ id: f.id, level, object: group, pickables: [proxy], setWire: (w) => look.setWire(w * 0.6), setDim: look.setDim, setGlow: look.setGlow, setAccent: look.setAccent, path });
   }
   return out;
 }

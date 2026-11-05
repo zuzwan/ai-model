@@ -35,7 +35,7 @@ export interface State {
   L3: { capacity: number; utilization: number; utilization_train: number; utilization_infer: number; depreciation_rate: number; energy_draw: number; pipeline: number[] };
   L4: PerChannel<{ request_rate: number; price_per_token: number }> & { latency: number; uptime: number; served: number };
   L5: { reserve: number; burn_rate: number; revenue_rate: number; funding_rate: number; runway: number };
-  L6: { benchmark_score: number; reward_model_bias: number; eval_coverage: number; w_usage: number; w_usefulness: number; w_safety: number; usage_ema: number; usage_trend: number };
+  L6: { benchmark_score: number; reward_model_bias: number; eval_coverage: number; w_usage: number; w_usefulness: number; w_safety: number; usage_ema: number; usage_trend: number; w_anchor: number };
   L7: { allocation_vector: Allocation; price_multiplier: number; distill_throttle: number; deprecate_flag: boolean; release_flag: boolean; data_alarm_gen: number };
   L8: { filter_strength: number; refusal_rate: number; incident_count: number; incidents_today: number };
   L9: { legitimacy: number; decay_rate: number; incident_damage: number; gate_open: boolean };
@@ -145,7 +145,7 @@ export function init(p: Params, seed: number): State {
       latency: 1, uptime: p.L4.uptime, served: 1,
     },
     L5: { reserve: st.R, burn_rate: 0, revenue_rate: 0, funding_rate: 0, runway: p.L5.runway_cap },
-    L6: { benchmark_score: 0, reward_model_bias: p.L6.reward_model_bias, eval_coverage: p.L6.eval_coverage, w_usage: st.w.u, w_usefulness: st.w.v, w_safety: st.w.s, usage_ema: st.U.consumer + st.U.enterprise, usage_trend: 0 },
+    L6: { benchmark_score: 0, reward_model_bias: p.L6.reward_model_bias, eval_coverage: p.L6.eval_coverage, w_usage: st.w.u, w_usefulness: st.w.v, w_safety: st.w.s, usage_ema: st.U.consumer + st.U.enterprise, usage_trend: 0, w_anchor: st.w.u },
     L7: { allocation_vector: { ...p.L7.base }, price_multiplier: 1, distill_throttle: 1, deprecate_flag: false, release_flag: false, data_alarm_gen: 0 },
     L8: { filter_strength: 0, refusal_rate: 0, incident_count: 0, incidents_today: 0 },
     L9: { legitimacy: st.Lambda, decay_rate: p.L9.decay_rate, incident_damage: 0, gate_open: true },

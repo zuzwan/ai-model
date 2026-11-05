@@ -56,4 +56,57 @@ export class Traces {
   }
 
   setOpacity(a: number) { for (const m of this.mats) m.opacity = a; }
+  /** Separate opacity for the usage and usefulness traces (the Umwelt view dims usefulness). */
+  setOpacities(usage: number, usefulness: number) { this.mats[0].opacity = usage; this.mats[1].opacity = usefulness; }
+}
+
+/** Viewer-only traces of what the loop cannot see (V, G, D), shown in the Umwelt view. */
+export class HiddenPanel {
+  readonly group = new THREE.Group();
+  readonly proxy: THREE.Mesh;
+  private lines = new Map<string, { line: THREE.Line; pos: Float32Array }>();
+
+  constructor(pickMat: THREE.Material) {
+    const P = style.hiddenPanel;
+    const frame = new THREE.LineSegments(
+      new THREE.EdgesGeometry(new THREE.PlaneGeometry(P.x1 - P.x0, P.y1 - P.y0)),
+      new THREE.LineDashedMaterial({ color: '#9a9a9a', dashSize: 0.02, gapSize: 0.015 }),
+    );
+    frame.computeLineDistances();
+    frame.position.set((P.x0 + P.x1) / 2, (P.y0 + P.y1) / 2, P.z);
+    this.group.add(frame);
+    this.proxy = new THREE.Mesh(new THREE.PlaneGeometry(P.x1 - P.x0, P.y1 - P.y0), pickMat);
+    this.proxy.position.copy(frame.position);
+    this.proxy.userData.id = 'hidden';
+    this.proxy.userData.pick = 'membrane';
+    this.group.add(this.proxy);
+    for (const [k, color] of Object.entries(P.colors)) {
+      const pos = new Float32Array(P.window * 3);
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.BufferAttribute(pos, 3).setUsage(THREE.DynamicDrawUsage));
+      g.setDrawRange(0, 0);
+      const line = new THREE.Line(g, new THREE.LineBasicMaterial({ color }));
+      line.frustumCulled = false;
+      this.lines.set(k, { line, pos });
+      this.group.add(line);
+    }
+    this.group.visible = false;
+  }
+
+  set(series: Record<string, number[]>) {
+    const P = style.hiddenPanel;
+    for (const [k, { line, pos }] of this.lines) {
+      const src = series[k] ?? [];
+      const n = Math.min(P.window, src.length);
+      const [lo, hi] = (P.ranges as Record<string, number[]>)[k];
+      for (let i = 0; i < n; i++) {
+        const v = Math.min(hi, Math.max(lo, src[src.length - n + i]));
+        pos[i * 3] = P.x0 + ((P.window - n + i) / (P.window - 1)) * (P.x1 - P.x0);
+        pos[i * 3 + 1] = P.y0 + ((v - lo) / (hi - lo)) * (P.y1 - P.y0);
+        pos[i * 3 + 2] = P.z;
+      }
+      line.geometry.setDrawRange(0, n);
+      line.geometry.attributes.position.needsUpdate = true;
+    }
+  }
 }
