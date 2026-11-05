@@ -159,7 +159,7 @@
     },
     "L5": {
       "var": "reserve",
-      "scale": 320
+      "scale": 240
     },
     "L6": {
       "var": "benchmark_score",

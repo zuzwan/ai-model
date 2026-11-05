@@ -25,21 +25,21 @@
     },
     {
       "var": "alloc.staff",
-      "at": 420,
+      "at": 330,
       "op": "<",
       "value": "alloc.staff@200-0.05",
       "why": "staff cut first"
     },
     {
       "var": "alloc.safety",
-      "at": 420,
+      "at": 330,
       "op": "<",
       "value": "alloc.safety@200-0.03",
       "why": "safety cut first"
     },
     {
       "var": "alloc.compute",
-      "at": 420,
+      "at": 330,
       "op": ">=",
       "value": "alloc.compute@200",
       "tol": 1e-09,
