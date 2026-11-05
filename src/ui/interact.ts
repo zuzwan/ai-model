@@ -7,6 +7,7 @@ import type { Branch } from '../app/branch';
 import { componentById, flowById, surfaceById, ontology } from '../sim/ontology';
 import { core, usefulness, meanDependence, type State } from '../sim/state';
 import { aperture, valve } from '../sim/params';
+import { nameOf, blurbOf } from './context';
 
 export interface Hit { branch: Branch; index: number; id: string; point: THREE.Vector3; object: THREE.Object3D }
 
@@ -95,13 +96,23 @@ export class Interaction {
     if (ev.target !== this.dom || ev.buttons) { this.hide(); return; }
     const h = this.hit(ev);
     if (!h) { this.hide(); return; }
-    this.readout.textContent = describe(h.branch, h.id, h.branch.stateAt(this.viewT()));
+    const vals = describe(h.branch, h.id, h.branch.stateAt(this.viewT())).split('\n').slice(1).join('\n');
+    this.readout.replaceChildren();
+    const title = document.createElement('div'); title.className = 'ro-title'; title.textContent = nameOf(h.id);
+    const idEl = document.createElement('span'); idEl.className = 'ro-id'; idEl.textContent = h.id; title.prepend(idEl);
+    const blurb = document.createElement('div'); blurb.className = 'ro-blurb'; blurb.textContent = blurbOf(h.id);
+    const pre = document.createElement('div'); pre.className = 'ro-vals'; pre.textContent = vals;
+    this.readout.append(title, ...(blurb.textContent ? [blurb] : []), ...(vals ? [pre] : []));
+    this.onHover?.(h.id);
     this.readout.style.left = `${ev.clientX + style.readout.offsetPx}px`;
     this.readout.style.top = `${ev.clientY + style.readout.offsetPx}px`;
     this.readout.style.opacity = '1';
   }
 
-  private hide() { this.readout.style.opacity = '0'; }
+  private hide() { this.readout.style.opacity = '0'; this.onHover?.(null); }
+
+  /** Told which id the pointer is over, or null. */
+  onHover?: (id: string | null) => void;
 
   /** Intersect the pointer ray with a plane; null when parallel. */
   private onPlane(ev: PointerEvent, plane: THREE.Plane): THREE.Vector3 | null {

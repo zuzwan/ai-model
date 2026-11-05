@@ -15,7 +15,7 @@ export interface Part {
   setDim(d: number): void;
   /** 0 normal .. 1 lit (a flow passing, a generation event). */
   setGlow(g: number): void;
-  /** The single selected element takes the marigold accent. */
+  /** The single selected element takes the red accent. */
   setAccent(on: boolean): void;
 }
 

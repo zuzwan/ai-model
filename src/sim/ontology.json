@@ -588,7 +588,7 @@
   {
    "id": "currency",
    "particle": {
-    "color": "#F2A900",
+    "color": "#D7261E",
     "size": 0.016,
     "speed": 0.5,
     "cap": 4000,

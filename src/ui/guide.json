@@ -1,0 +1,90 @@
+{
+  "title": "AI as organism",
+  "intro": [
+    "A living model of a frontier AI company, drawn as an organism. The outer shell is the loop: the organisation that gathers data, buys compute, trains, deploys, earns and answers to the world. The smaller shell inside it is the model itself, the trained object the loop keeps alive.",
+    "It runs one simulated day per tick. Everything you see moving is driven by the simulation, nothing is animated for show."
+  ],
+  "read": [
+    ["Pods", "Stocks. The grey level inside a pod is how much it holds."],
+    ["Tubes and dots", "Flows. Dots travel along a tube when something moves between parts. More dots means a bigger flow."],
+    ["Outer shell", "The loop: the company as a whole."],
+    ["Inner shell", "The model: weights, inference, context and sampling."],
+    ["Windows in the shell", "Surfaces where the organism meets the world. Their shutters open and close."],
+    ["Pads outside", "The environment: users, data, capital, regulators, energy. The dot cloud is competitors."],
+    ["Lines on the model shell", "How far the model is tuned to usage versus usefulness."],
+    ["Triangle", "What the reward is aiming at: usage, usefulness, safety."]
+  ],
+  "substances": {
+    "data": "Data",
+    "compute": "Compute",
+    "currency": "Money",
+    "prompts": "Prompts and outputs",
+    "signals": "Signals and decisions",
+    "weights": "Weights",
+    "heat": "Heat"
+  },
+  "strip": {
+    "W": ["capability", "How capable the model is."],
+    "U": ["usage", "How much it is used."],
+    "V": ["usefulness", "How much real good the use does."],
+    "G": ["gap", "Tuned for usage minus tuned for usefulness."],
+    "R": ["treasury", "Money in reserve."],
+    "Λ": ["legitimacy", "Public and regulatory standing."]
+  },
+  "scenarios": {
+    "baseline": "A healthy run. Steady flows, slow growth.",
+    "collapse": "Training feeds on its own output until the model degrades.",
+    "drift": "The reward chases engagement, so usage rises while usefulness falls.",
+    "starvation": "Power is cut from day 140, so training stalls.",
+    "legitimacy": "Incidents pile up, standing collapses and the gate to users closes.",
+    "withdrawal": "Investors leave at day 210 and the treasury drains.",
+    "dependence": "Users lean on the model while their own know-how fades."
+  },
+  "controls": [
+    ["space", "run or pause"],
+    ["← →", "scrub through time"],
+    ["1–4", "speed"],
+    ["5–9", "camera views"],
+    ["drag", "orbit; scroll to zoom"],
+    ["hover", "read any part"],
+    ["drag a part", "change it and watch the future rewrite"],
+    ["f", "fork: compare two futures side by side"],
+    ["u", "the model's own view of the world"],
+    ["m", "peel the shells"],
+    ["l", "labels on or off"],
+    ["g", "this guide"]
+  ],
+  "components": {
+    "L1": "Raw text and data waiting to be trained on, human-made and synthetic.",
+    "L2": "Turns data and compute into the next model.",
+    "L3": "The chips and power the company owns.",
+    "L4": "Where users meet the product: apps and the API.",
+    "L5": "Money in reserve. When it runs out, the organism dies.",
+    "L6": "Measures the model and sets what training rewards.",
+    "L7": "Management: where money and effort go.",
+    "L8": "Filters, refusals and policy on what the model may do.",
+    "L9": "Trust from the public and regulators.",
+    "L10": "Every past model, kept on the shelf.",
+    "L11": "People and the know-how only they carry.",
+    "M1": "The trained weights: the model itself.",
+    "M2": "Runs the weights to answer requests.",
+    "M3": "What the model can hold in mind for one request.",
+    "M4": "Where answers come out, one token at a time.",
+    "E1": "Consumers and enterprises using the product.",
+    "E2": "The open web and other shared human data.",
+    "E3": "Investors and lenders.",
+    "E4": "Regulators, press and the public.",
+    "E5": "Electricity and the grid.",
+    "E6": "Rival labs setting the pace.",
+    "loop": "The organism: the whole company loop.",
+    "model": "The technical object: the model the loop keeps alive.",
+    "S1": "Where the product meets users.",
+    "S2": "Where outside data comes in.",
+    "S3": "Where capital comes in.",
+    "S4": "Where rules and scrutiny press in.",
+    "S5": "Where power comes in.",
+    "S6": "Where rivals' releases are felt.",
+    "L6.objective": "The reward's aim. Drag the dot to retarget it.",
+    "hidden": "What the loop cannot see about itself."
+  }
+}

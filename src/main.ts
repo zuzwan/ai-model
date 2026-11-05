@@ -8,6 +8,7 @@ import { Interaction } from './ui/interact';
 import { bindKeys } from './ui/keys';
 import { Strip } from './ui/strip';
 import { Menu } from './ui/menu';
+import { Labels, Guide, TopBar } from './ui/context';
 import { readHash, writeHash, isOwnHash } from './ui/hash';
 import { loadScenario, scenarioById } from './sim/scenario';
 import { run } from './sim/tick';
@@ -81,6 +82,7 @@ function loadScenarioInto(id: string, t = 0, seed?: number) {
   viewT = primary.firstT;
   jumpTo(t);
   playing = true;
+  guidePanel.setScenario(primary.scenarioId);
   writeHash({ scenario: primary.scenarioId, t: viewT });
 }
 
@@ -110,7 +112,22 @@ let umwelt = false;
 const strip = new Strip((t) => jumpTo(t));
 const menu = new Menu((id) => loadScenarioInto(id));
 
-new Interaction(renderer.domElement, rig.camera, rig.controls, branches, () => viewT, {
+const labels = new Labels();
+const guidePanel = new Guide((id) => loadScenarioInto(id), () => toggleGuide(false));
+function toggleGuide(on?: boolean) {
+  guidePanel.toggle(on);
+  try { localStorage.setItem('organism.guideSeen', '1'); } catch { /* storage may be unavailable */ }
+  resize();
+}
+const bar = new TopBar(ui.speeds, {
+  guide: () => toggleGuide(),
+  play: () => { playing = !playing; acc = 0; },
+  speed: (i) => { speed = i; },
+  labels: () => labels.setVisible(!labels.visible),
+  scenario: (id) => loadScenarioInto(id),
+});
+
+const interaction = new Interaction(renderer.domElement, rig.camera, rig.controls, branches, () => viewT, {
   setAperture(b, s, i, v) {
     b.editParams(viewT, (p) => {
       const n = Math.max(1, surfaceById.get(s)?.apertures.length ?? 1, i + 1);
@@ -146,6 +163,8 @@ new Interaction(renderer.domElement, rig.camera, rig.controls, branches, () => v
   },
 });
 
+interaction.onHover = (id) => labels.setActive(id);
+
 bindKeys((intent) => {
   if (menu.open && intent.type !== 'menu' && intent.type !== 'escape') menu.toggle(false);
   switch (intent.type) {
@@ -173,8 +192,11 @@ bindKeys((intent) => {
       break;
     case 'fork': openFork(); break;
     case 'menu': menu.toggle(); break;
+    case 'labels': labels.setVisible(!labels.visible); break;
+    case 'guide': toggleGuide(); break;
     case 'escape':
       if (menu.open) { menu.toggle(false); break; }
+      if (guidePanel.open) { toggleGuide(false); break; }
       loadScenarioInto('baseline', 0, 0);
       break;
   }
@@ -187,8 +209,8 @@ window.addEventListener('hashchange', () => {
 });
 
 function resize() {
-  const w = window.innerWidth;
-  const h = window.innerHeight;
+  const w = stage.clientWidth || window.innerWidth;
+  const h = stage.clientHeight || window.innerHeight;
   renderer.setSize(w, h);
   rig.resize(w / branches().length, h);
   for (const b of branches()) b.view.setViewport(h * renderer.getPixelRatio(), style.camera.fov);
@@ -199,6 +221,10 @@ window.addEventListener('resize', resize);
 // ---- Start: the hash route, or the baseline, already running ------------------------------
 const route = readHash();
 primary.load(route && scenarioById.has(route.scenario) ? route.scenario : 'baseline');
+let seen = false;
+try { seen = localStorage.getItem('organism.guideSeen') === '1'; } catch { /* storage may be unavailable */ }
+guidePanel.setScenario(primary.scenarioId);
+if (!seen) guidePanel.toggle(true);
 resize();
 jumpTo(route?.t ?? 0);
 
@@ -269,6 +295,10 @@ renderer.setAnimationLoop((now) => {
       renderer.render(b.scene, rig.camera);
     });
   }
+
+  labels.root.classList.toggle('off', !labels.visible || list.length > 1);
+  if (list.length === 1) labels.update(rig.camera, W, H);
+  bar.update({ scenario: primary.scenarioId, playing, speed, labels: labels.visible, guide: guidePanel.open });
 
   fps.frames++;
   if (now - fps.since > 1000) { fps.value = (fps.frames * 1000) / (now - fps.since); fps.frames = 0; fps.since = now; }

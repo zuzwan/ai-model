@@ -1,10 +1,12 @@
 // The bottom strip: tick index, generation, six sparklines (W U V G R Λ) and the time rail.
 // The only persistent text on screen. Hidden with H.
 import ui from './ui.json';
+import guide from './guide.json';
 import type { Record as StateRecord } from '../sim/record';
 import { core, type State } from '../sim/state';
 
 const KEYS = ['W', 'U', 'V', 'G', 'R', 'Λ'] as const;
+const NAMES = guide.strip as unknown as Record<string, [string, string]>;
 type Key = (typeof KEYS)[number];
 const pick = (s: State): Record<Key, number> => {
   const c = core(s);
@@ -89,9 +91,11 @@ export class Strip {
     KEYS.forEach((k, i) => {
       const cx = x0 + i * cell;
       c.fillStyle = S.ink;
-      c.fillText(k, cx, lineY);
-      const sx = cx + 14;
-      const sw = cell - 24;
+      const label = narrow ? k : `${k} ${NAMES[k][0]}`;
+      c.fillText(label, cx, lineY);
+      const lw = c.measureText(label).width;
+      const sx = cx + lw + 8;
+      const sw = Math.max(10, cell - lw - 18);
       const sh = H - S.railHeight - 14;
       const sy = 6;
       const [lo, hi] = S.ranges[k] as [number, number];

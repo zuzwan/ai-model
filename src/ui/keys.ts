@@ -14,7 +14,9 @@ export type Intent =
   | { type: 'umwelt' }
   | { type: 'fork' }
   | { type: 'escape' }
-  | { type: 'menu' };
+  | { type: 'menu' }
+  | { type: 'labels' }
+  | { type: 'guide' };
 
 const scenarioKeys = new Map(scenarios.filter((s) => s.key).map((s) => [s.key!, s.id]));
 
@@ -22,7 +24,7 @@ const scenarioKeys = new Map(scenarios.filter((s) => s.key).map((s) => [s.key!, 
 export const KEY_HELP: [string, string][] = [
   ['space', 'run / pause'], ['.  ,', 'step forward / back'], ['←  →', 'scrub (shift: 30)'],
   ['1–4', 'speed'], ['5–9', 'views'], ['m', 'envelopes'], ['u', 'umwelt'], ['f', 'fork'],
-  ['h', 'strip'], ['esc', 'reset'], ['/', 'this menu'],
+  ['h', 'strip'], ['l', 'labels'], ['g', 'guide'], ['esc', 'reset'], ['/', 'this menu'],
 ];
 
 export function bindKeys(dispatch: (i: Intent) => void): void {
@@ -37,6 +39,8 @@ export function bindKeys(dispatch: (i: Intent) => void): void {
     else if (lower === 'm') intent = { type: 'cycleEnvelopes' };
     else if (lower === 'u') intent = { type: 'umwelt' };
     else if (lower === 'f') intent = { type: 'fork' };
+    else if (lower === 'l') intent = { type: 'labels' };
+    else if (lower === 'g') intent = { type: 'guide' };
     else if (lower === 'h') intent = { type: 'toggleStrip' };
     else if (k === ' ') intent = { type: 'togglePlay' };
     else if (k === '.') intent = { type: 'step', by: 1 };
