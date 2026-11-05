@@ -1,0 +1,49 @@
+{
+  "id": "collapse",
+  "name": "Model collapse",
+  "key": "q",
+  "seed": 11,
+  "paramOverrides": {
+    "E2.leak_fraction": 0.4,
+    "L2.distillation": 1,
+    "L1.license_enabled": 0
+  },
+  "startOverrides": {},
+  "expect": [
+    {
+      "var": "min(H,0,280)",
+      "at": 280,
+      "op": "<",
+      "value": 0.6,
+      "why": "H falls below 0.6 within 280 ticks"
+    },
+    {
+      "var": "max(W,0,200)",
+      "at": 200,
+      "op": ">",
+      "value": "W@0+0.005",
+      "why": "W rises first"
+    },
+    {
+      "var": "W",
+      "at": 480,
+      "op": "<",
+      "value": "max(W,0,200)@0-0.04",
+      "why": "then falls"
+    },
+    {
+      "var": "N",
+      "at": 480,
+      "op": ">",
+      "value": "N@200",
+      "why": "generations advance while W declines"
+    },
+    {
+      "var": "X",
+      "at": 330,
+      "op": ">",
+      "value": "X@0",
+      "why": "distillation raises contamination"
+    }
+  ]
+}

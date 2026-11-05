@@ -1,0 +1,63 @@
+{
+  "id": "withdrawal",
+  "name": "Capital withdrawal",
+  "key": "t",
+  "seed": 15,
+  "paramOverrides": {
+    "E3.patience": 21
+  },
+  "startOverrides": {},
+  "schedules": [
+    {
+      "path": "E3.capital_available",
+      "from": 210,
+      "value": 0
+    }
+  ],
+  "expect": [
+    {
+      "var": "min(R,210,900)",
+      "at": 900,
+      "op": "==",
+      "value": 0,
+      "tol": 1e-09,
+      "why": "reserve depletes"
+    },
+    {
+      "var": "alloc.staff",
+      "at": 420,
+      "op": "<",
+      "value": "alloc.staff@200-0.05",
+      "why": "staff cut first"
+    },
+    {
+      "var": "alloc.safety",
+      "at": 420,
+      "op": "<",
+      "value": "alloc.safety@200-0.03",
+      "why": "safety cut first"
+    },
+    {
+      "var": "alloc.compute",
+      "at": 420,
+      "op": ">=",
+      "value": "alloc.compute@200",
+      "tol": 1e-09,
+      "why": "compute held while staff and safety are cut"
+    },
+    {
+      "var": "Lambda",
+      "at": 600,
+      "op": "<",
+      "value": "Lambda@200",
+      "why": "legitimacy falls"
+    },
+    {
+      "var": "deprecations",
+      "at": 900,
+      "op": ">=",
+      "value": 1,
+      "why": "deprecation"
+    }
+  ]
+}

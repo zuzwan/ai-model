@@ -1,0 +1,47 @@
+{
+  "id": "starvation",
+  "name": "Compute starvation",
+  "key": "e",
+  "seed": 13,
+  "paramOverrides": {},
+  "startOverrides": {},
+  "schedules": [
+    {
+      "path": "E5.availability",
+      "from": 140,
+      "value": 0.5
+    }
+  ],
+  "expect": [
+    {
+      "var": "max(F5,150,250)",
+      "at": 250,
+      "op": "==",
+      "value": 0,
+      "tol": 1e-12,
+      "why": "training pauses"
+    },
+    {
+      "var": "N",
+      "at": 250,
+      "op": "==",
+      "value": "N@150",
+      "tol": 0,
+      "why": "no new generation"
+    },
+    {
+      "var": "Z",
+      "at": 420,
+      "op": ">",
+      "value": "W@420",
+      "why": "rival overtakes"
+    },
+    {
+      "var": "U",
+      "at": 420,
+      "op": "<",
+      "value": "U@140-0.05",
+      "why": "substitution drains users"
+    }
+  ]
+}

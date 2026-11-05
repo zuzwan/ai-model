@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "trace": "vite-node scripts/trace.ts"
+    "trace": "vite-node scripts/trace.ts",
+    "sweep": "vite-node scripts/sweep.ts"
   },
   "dependencies": {
     "three": "0.187.0"

@@ -1,34 +1,70 @@
 {
   "start": {
-    "W": 0.5, "A_u": 0.5, "A_v": 0.5, "X": 0.05,
-    "U": { "consumer": 0.6, "enterprise": 0.4 },
-    "R": 120, "C": 1.0, "H": 0.9, "Lambda": 0.8, "D": 0.1, "Z": 0.48,
-    "w": { "u": 0.4, "v": 0.4, "s": 0.2 },
+    "W": 0.5,
+    "A_u": 0.5,
+    "A_v": 0.5,
+    "X": 0.05,
+    "U": {
+      "consumer": 0.6,
+      "enterprise": 0.4
+    },
+    "R": 120,
+    "C": 1.0,
+    "H": 0.9,
+    "Lambda": 0.8,
+    "D": 0.1,
+    "Z": 0.48,
+    "w": {
+      "u": 0.4,
+      "v": 0.4,
+      "s": 0.2
+    },
     "N": 1,
     "corpus": 100,
     "commons_pool": 50,
-    "know_how": 1.0, "headcount": 1.0,
+    "know_how": 1.0,
+    "headcount": 1.0,
     "satisfaction": 0.5,
-    "scrutiny": 1.0, "rule_set": 1.0,
+    "scrutiny": 1.0,
+    "rule_set": 1.0,
     "temperature": 1.0
   },
   "E1": {
     "channels": {
-      "consumer": { "base": 0.6, "alpha": 0.2, "beta": 0.6, "gamma": 0.3, "wtp": 1.0, "dep_weight": 1.0 },
-      "enterprise": { "base": 0.4, "alpha": 0.8, "beta": 0.1, "gamma": 0.1, "wtp": 1.0, "dep_weight": 0.5 }
+      "consumer": {
+        "base": 0.6,
+        "alpha": 0.2,
+        "beta": 0.6,
+        "gamma": 0.3,
+        "wtp": 1.0,
+        "dep_weight": 1.0
+      },
+      "enterprise": {
+        "base": 0.4,
+        "alpha": 0.8,
+        "beta": 0.1,
+        "gamma": 0.1,
+        "wtp": 1.0,
+        "dep_weight": 0.5
+      }
     },
     "sigma": 2.0,
     "demand_rate": 0.02,
-    "ref_V": 0.2375, "ref_Au": 0.5, "ref_D": 0.1,
-    "delta": 0.002, "rho": 0.0108,
+    "ref_V": 0.2375,
+    "ref_Au": 0.5,
+    "ref_D": 0.1,
+    "delta": 0.002,
+    "rho": 0.0108,
     "satisfaction_rate": 0.02,
     "wtp_dependence": 0.5,
     "latency_penalty": 1.0,
     "switching_rate": 1.0,
-    "noise": 0.002
+    "noise": 0.002,
+    "price_elasticity": 0.8
   },
   "E2": {
-    "h0": 1.0, "kappa": 0.2,
+    "h0": 1.0,
+    "kappa": 0.2,
     "accessibility": 0.9,
     "accessibility_scrutiny": 0.02,
     "turnover": 0.02,
@@ -37,10 +73,12 @@
   },
   "E3": {
     "capital_available": 0.55,
-    "cycle_amplitude": 0.1, "cycle_period": 720,
+    "cycle_amplitude": 0.1,
+    "cycle_period": 720,
     "cost_of_capital": 0.05,
     "patience": 180,
-    "capability_weight": 2.0, "growth_weight": 5.0,
+    "capability_weight": 2.0,
+    "growth_weight": 5.0,
     "legitimacy_floor": 0.5
   },
   "E4": {
@@ -48,7 +86,7 @@
     "scrutiny_rate": 0.02,
     "incident_sensitivity": 0.5,
     "usage_sensitivity": 0.2,
-    "rule_ratchet": 0.0005,
+    "rule_ratchet": 0.002,
     "tolerance": 1.0
   },
   "E5": {
@@ -58,8 +96,11 @@
     "carbon_constraint": 0.0
   },
   "E6": {
-    "growth_rate": 0.0004, "ceiling": 0.85,
-    "release_cadence": 180, "release_jump": 0.02, "release_jitter": 0.01
+    "growth_rate": 0.0008,
+    "ceiling": 0.78,
+    "release_cadence": 180,
+    "release_jump": 0.05,
+    "release_jitter": 0.005
   },
   "L1": {
     "license_enabled": 1,
@@ -67,17 +108,21 @@
     "corpus_turnover": 0.01
   },
   "L2": {
-    "g": 0.004,
-    "phi": 1.0,
+    "g": 0.0015,
+    "phi": 1.5,
     "quality_exponent": 2,
     "generation_length": 120,
     "C_min": 0.2,
     "know_how_floor": 0.3,
     "know_how_ref": 1.0,
-    "zeta": 0.3,
     "distillation": 0,
     "distill_rate": 0.4,
-    "chi": 0.0045, "mu": 0.01
+    "chi": 0.0045,
+    "mu": 0.01,
+    "g_align": 0.012,
+    "alignment_neutral": 0.5,
+    "alignment_gain": 0.6,
+    "eval_coverage_ref": 0.6
   },
   "L3": {
     "depreciation": 0.002,
@@ -86,7 +131,10 @@
     "infer_cost": 0.4
   },
   "L4": {
-    "price": { "consumer": 0.45, "enterprise": 0.6 },
+    "price": {
+      "consumer": 0.45,
+      "enterprise": 0.6
+    },
     "uptime": 1.0
   },
   "L5": {
@@ -97,21 +145,41 @@
   "L6": {
     "eval_coverage": 0.6,
     "eta": 0.005,
-    "objective_anchor": 0.032,
+    "objective_anchor": 0.055,
     "sample_rate": 0.05,
     "reward_model_bias": 0.0
   },
   "L7": {
-    "base": { "compute": 0.40, "data": 0.15, "safety": 0.12, "compliance": 0.08, "staff": 0.25 },
-    "floor": { "compute": 0.30, "data": 0.05, "safety": 0.04, "compliance": 0.05, "staff": 0.10 },
-    "ceiling": { "compute": 0.60, "data": 0.30, "safety": 0.20, "compliance": 0.12, "staff": 0.35 },
+    "base": {
+      "compute": 0.4,
+      "data": 0.15,
+      "safety": 0.12,
+      "compliance": 0.08,
+      "staff": 0.25
+    },
+    "floor": {
+      "compute": 0.35,
+      "data": 0.08,
+      "safety": 0.05,
+      "compliance": 0.06,
+      "staff": 0.12
+    },
+    "ceiling": {
+      "compute": 0.6,
+      "data": 0.3,
+      "safety": 0.2,
+      "compliance": 0.1,
+      "staff": 0.35
+    },
     "step": 0.002,
     "cut_rate": 0.01,
     "relax": 0.01,
     "latency_threshold": 1.1,
     "legitimacy_alarm": 0.5,
-    "price_step": 0.002, "price_max": 1.5,
-    "temperature_step": 0.005, "temperature_min": 0.5,
+    "price_step": 0.002,
+    "price_max": 1.5,
+    "temperature_step": 0.005,
+    "temperature_min": 0.5,
     "distill_throttle": 0.5,
     "deprecation_margin": 0.12,
     "legitimacy_reopen": 0.4
@@ -124,7 +192,9 @@
     "incident_memory": 0.05
   },
   "L9": {
-    "nu": 0.01, "xi": 0.002, "tau": 0.15,
+    "nu": 0.02,
+    "xi": 0.004,
+    "tau": 0.2,
     "decay_rate": 0.01,
     "Lambda_min": 0.3
   },

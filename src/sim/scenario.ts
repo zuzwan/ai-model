@@ -2,7 +2,7 @@
 import { defaultParams, withOverrides, type Params, type Schedule } from './params';
 import { init, type State } from './state';
 
-export interface Expectation { var: string; at: number; op: '<' | '>' | '<=' | '>=' | '=='; value: number; tol: number }
+export interface Expectation { var: string; at: number; op: '<' | '>' | '<=' | '>=' | '=='; value: number | string; tol?: number; why?: string }
 export interface Scenario {
   id: string;
   name: string;

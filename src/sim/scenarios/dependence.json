@@ -1,0 +1,41 @@
+{
+  "id": "dependence",
+  "name": "Dependence trap",
+  "key": "y",
+  "seed": 16,
+  "paramOverrides": {
+    "E2.kappa": 0.8,
+    "E1.delta": 0.1
+  },
+  "startOverrides": {},
+  "expect": [
+    {
+      "var": "D",
+      "at": 420,
+      "op": ">",
+      "value": 0.5,
+      "why": "dependence rises"
+    },
+    {
+      "var": "h",
+      "at": 420,
+      "op": "<",
+      "value": "h@0-0.4",
+      "why": "human expression collapses"
+    },
+    {
+      "var": "H",
+      "at": 420,
+      "op": "<",
+      "value": "H@0-0.05",
+      "why": "food falls without distillation"
+    },
+    {
+      "var": "min(U,60,420)",
+      "at": 420,
+      "op": ">",
+      "value": "U@0",
+      "why": "usage rises throughout"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "legitimacy",
+  "name": "Legitimacy loss",
+  "key": "r",
+  "seed": 14,
+  "paramOverrides": {
+    "L8.incident_multiplier": 3,
+    "E4.scrutiny_base": 2
+  },
+  "startOverrides": {},
+  "expect": [
+    {
+      "var": "min(Lambda,0,600)",
+      "at": 600,
+      "op": "<",
+      "value": 0.3,
+      "why": "legitimacy falls below 0.3"
+    },
+    {
+      "var": "min(F31,0,600)",
+      "at": 600,
+      "op": "==",
+      "value": 0,
+      "tol": 0,
+      "why": "F31 closes"
+    },
+    {
+      "var": "max(closed_while_capable,0,600)",
+      "at": 600,
+      "op": "==",
+      "value": 1,
+      "tol": 0,
+      "why": "usage zero while W is high"
+    }
+  ]
+}

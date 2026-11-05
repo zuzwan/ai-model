@@ -1,13 +1,47 @@
 {
   "id": "baseline",
   "name": "Baseline",
+  "key": "0",
   "seed": 0,
   "paramOverrides": {},
   "startOverrides": {},
   "expect": [
-    { "var": "alive", "at": 1500, "op": "==", "value": 1, "tol": 0 },
-    { "var": "Lambda", "at": 1500, "op": ">", "value": 0.3, "tol": 0 },
-    { "var": "R", "at": 1500, "op": ">", "value": 0, "tol": 0 },
-    { "var": "deprecations", "at": 1500, "op": "==", "value": 0, "tol": 0 }
+    {
+      "var": "min(alive,0,1500)",
+      "at": 1500,
+      "op": "==",
+      "value": 1,
+      "tol": 0,
+      "why": "stays alive"
+    },
+    {
+      "var": "deprecations",
+      "at": 1500,
+      "op": "==",
+      "value": 0,
+      "tol": 0,
+      "why": "never deprecated"
+    },
+    {
+      "var": "min(Lambda,0,1500)",
+      "at": 1500,
+      "op": ">",
+      "value": 0.3,
+      "why": "legitimacy above operating threshold"
+    },
+    {
+      "var": "min(H,0,1500)",
+      "at": 1500,
+      "op": ">",
+      "value": 0.6,
+      "why": "food above collapse threshold"
+    },
+    {
+      "var": "max(G,0,1500)",
+      "at": 1500,
+      "op": "<",
+      "value": 0.1,
+      "why": "calm baseline: gap stays small"
+    }
   ]
 }

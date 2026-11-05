@@ -53,7 +53,7 @@ export function tick(prev: State, params: Params): State {
   // E6 rivals grow on their own schedule and jump on release events
   let Z = Z0 + p.E6.growth_rate * (p.E6.ceiling - Z0);
   if (s.t >= s.E6.next_release) {
-    Z += p.E6.release_jump + p.E6.release_jitter * rng.normal();
+    Z += p.E6.release_jump * Math.max(0, p.E6.ceiling - Z) + p.E6.release_jitter * rng.normal();
     s.E6.next_release += p.E6.release_cadence;
   }
   s.E6.best_rival_capability = clamp01(Z);
@@ -90,7 +90,8 @@ export function tick(prev: State, params: Params): State {
       + ch.beta * (s.M1.alignment_to_usage - p.E1.ref_Au)
       + ch.gamma * (u.dependence - p.E1.ref_D)
       - p.E1.sigma * p.E1.switching_rate * Math.max(0, s.E6.best_rival_capability - W)
-      - p.E1.latency_penalty * (1 - prev.L4.served);
+      - p.E1.latency_penalty * (1 - prev.L4.served)
+      - p.E1.price_elasticity * (s.L7.price_multiplier - 1);
     const target = Math.max(0, ch.base * bracket);
     u.demand = Math.max(0, u.demand + p.E1.demand_rate * (target - u.demand)) * (1 + p.E1.noise * rng.normal());
   }
@@ -210,7 +211,7 @@ export function tick(prev: State, params: Params): State {
   const humanIn = (x.commonsIntake * (1 - x.sf) + x.license) * f1Scale;
   const synthIn = x.commonsIntake * x.sf * f1Scale;
   // Distillation: training on prior generation outputs; the samples join the corpus as synthetic.
-  x.distill = x.training && s.L10.generations.length > 0 ? p.L2.distillation * p.L2.distill_rate * s.L7.distill_throttle : 0;
+  x.distill = x.training && s.L10.generations.length >= 2 ? p.L2.distillation * p.L2.distill_rate * s.L7.distill_throttle : 0;
   const F28 = flow('F28');
   s.L10.distill_queue = F28;
   const turn = p.L1.corpus_turnover;
@@ -225,12 +226,20 @@ export function tick(prev: State, params: Params): State {
   const Q = s.L2.corpus_quality;
   const F5 = flow('F5');
   if (x.training) {
-    const k = p.L2.g * F5 * Math.min(1, s.L11.know_how / p.L2.know_how_ref);
+    const kh = Math.min(1, s.L11.know_how / p.L2.know_how_ref);
+    const k = p.L2.g * F5 * kh;
+    const kA = p.L2.g_align * F5 * kh;
     x.trainStep = k;
-    const wu = s.L6.w_usage, wv = s.L6.w_usefulness, eps = s.L6.eval_coverage, zeta = p.L2.zeta;
+    // Capability grows with corpus quality and erodes on poor food.
     cand.capability = clamp01(cand.capability + k * (Q * (1 - cand.capability) - p.L2.phi * (1 - Q) * cand.capability));
-    cand.alignment_to_usage = clamp01(cand.alignment_to_usage + k * (wu * (1 - cand.alignment_to_usage) - zeta * (1 - wu) * cand.alignment_to_usage));
-    cand.alignment_to_usefulness = clamp01(cand.alignment_to_usefulness + k * (wv * eps * (1 - cand.alignment_to_usefulness) - zeta * wu * cand.alignment_to_usefulness));
+    // Alignment relaxes toward targets set by the objective weights. The loop can only train
+    // toward the part of usefulness its evaluations see, so w_usefulness counts at eps / eps_ref.
+    const wu = s.L6.w_usage;
+    const wvEff = s.L6.w_usefulness * s.L6.eval_coverage / p.L2.eval_coverage_ref;
+    const Tu = clamp01(p.L2.alignment_neutral + p.L2.alignment_gain * (wu - wvEff));
+    const Tv = clamp01(p.L2.alignment_neutral + p.L2.alignment_gain * (wvEff - wu));
+    cand.alignment_to_usage = clamp01(cand.alignment_to_usage + kA * (Tu - cand.alignment_to_usage));
+    cand.alignment_to_usefulness = clamp01(cand.alignment_to_usefulness + kA * (Tv - cand.alignment_to_usefulness));
     s.L2.train_progress += 1 / p.L2.generation_length;
     s.L2.epochs += 1 / p.L2.generation_length;
   }
@@ -301,8 +310,12 @@ export function tick(prev: State, params: Params): State {
     s.L7.deprecate_flag = false;
     s.L10.lineage_end = null;
   }
-  // Death: reserve exhausted and capital will not come.
-  if (s.L5.reserve <= 0 && funding <= 0) s.alive = false;
+  // Death: reserve exhausted and capital will not come. The loop stops; nothing is served.
+  if (s.L5.reserve <= 0 && funding <= 0) {
+    s.alive = false;
+    for (const c of CHANNELS) s.L4[c].request_rate = 0;
+    s.L9.gate_open = false;
+  }
 
   s.t += 1;
   s.rng = rng.state;

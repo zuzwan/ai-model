@@ -1,0 +1,48 @@
+{
+  "id": "drift",
+  "name": "Engagement drift",
+  "key": "w",
+  "seed": 12,
+  "paramOverrides": {
+    "L6.eta": 0.05,
+    "L6.eval_coverage": 0.4
+  },
+  "startOverrides": {},
+  "expect": [
+    {
+      "var": "G",
+      "at": 420,
+      "op": ">",
+      "value": 0.3,
+      "why": "G exceeds 0.3 by tick 420"
+    },
+    {
+      "var": "U",
+      "at": 420,
+      "op": ">",
+      "value": "U@0",
+      "why": "usage rises"
+    },
+    {
+      "var": "V",
+      "at": 420,
+      "op": "<",
+      "value": "V@0",
+      "why": "while usefulness falls"
+    },
+    {
+      "var": "spread",
+      "at": 420,
+      "op": ">",
+      "value": "spread@0+0.05",
+      "why": "channels diverge at the deployment surface"
+    },
+    {
+      "var": "w_u",
+      "at": 420,
+      "op": ">",
+      "value": 0.6,
+      "why": "L6 tilts toward usage"
+    }
+  ]
+}
