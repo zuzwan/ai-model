@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { ontology } from '../sim/ontology';
 import style from './style.json';
+import { roundedRectShape } from './organic';
 import { type Part, faceMaterial, edgeMaterial, fader, pickMaterial } from './part';
 
 function mulberry32(seed: number) {
@@ -38,10 +39,15 @@ export function buildFields(): Part[] {
       group.add(new THREE.Points(new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(pos, 3)), pm));
       return { id: c.id, level: c.level, object: group, pickables: [proxy], ...fader([pm], []) };
     }
-    const geom = new THREE.BoxGeometry(l.w, l.h, l.d);
+    // A soft rounded pad with a second, inset contour.
+    const rr = Math.min(l.w, l.d) * style.organic.fieldK;
+    const shape = roundedRectShape(l.w, l.d, rr);
     const fm = faceMaterial(style.fieldOpacity);
     const em = edgeMaterial(style.fieldEdge);
-    group.add(new THREE.Mesh(geom, fm), new THREE.LineSegments(new THREE.EdgesGeometry(geom), em));
+    const pad = new THREE.Mesh(new THREE.ShapeGeometry(shape, 16).rotateX(-Math.PI / 2), fm);
+    const outline = (k: number) => new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(
+      roundedRectShape(l.w * k, l.d * k, rr * k).getPoints(12).map((p) => new THREE.Vector3(p.x, 0, -p.y))), em);
+    group.add(pad, outline(1), outline(style.organic.fieldInner));
     return { id: c.id, level: c.level, object: group, pickables: [proxy], ...fader([fm], [em], edgeBase) };
   });
 }

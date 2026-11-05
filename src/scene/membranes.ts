@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { ontology } from '../sim/ontology';
 import style from './style.json';
 import { faceNormal } from './layout';
+import { roundedRectShape } from './organic';
 import { type Part, faceMaterial, edgeMaterial, fader, pickMaterial } from './part';
 
 export interface Membrane extends Part {
@@ -23,8 +24,9 @@ export function buildMembranes(): Membrane[] {
     const edges: THREE.LineBasicMaterial[] = [];
     const frameMat = edgeMaterial();
     edges.push(frameMat);
-    const frame = new THREE.EdgesGeometry(new THREE.PlaneGeometry(l.w, l.h));
-    group.add(new THREE.LineSegments(frame, frameMat));
+    const rr = Math.min(l.w, l.h) * style.organic.membraneK;
+    const frame = new THREE.BufferGeometry().setFromPoints(roundedRectShape(l.w, l.h, rr).getPoints(12));
+    group.add(new THREE.LineLoop(frame, frameMat));
 
     const proxy = new THREE.Mesh(new THREE.PlaneGeometry(l.w, l.h), pickMaterial);
     proxy.userData.id = s.id;

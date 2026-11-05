@@ -262,5 +262,23 @@
         1
       ]
     }
+  },
+  "organic": {
+    "podK": 0.42,
+    "slabK": 0.3,
+    "trayK": 0.45,
+    "envelopeK": 0.22,
+    "podSegments": 6,
+    "capSegments": 12,
+    "fresnelPower": 2.4,
+    "coreGain": 0.35,
+    "rimGain": 7,
+    "envelopeRimGain": 3,
+    "fillInset": 0.9,
+    "dividerInk": "#9a9a9a",
+    "membraneK": 0.25,
+    "fieldK": 0.3,
+    "fieldInner": 0.86,
+    "envelopeInk": "#8a8a8a"
   }
 }

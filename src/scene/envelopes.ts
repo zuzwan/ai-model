@@ -1,24 +1,22 @@
-// Loop and model envelopes: translucent rounded prisms with thin black edges.
+// Loop and model envelopes: soft translucent shells with contour rings.
 import * as THREE from 'three';
-import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { ontology } from '../sim/ontology';
 import style from './style.json';
-import { type Part, faceMaterial, edgeMaterial, fader } from './part';
+import { type Part, edgeMaterial, fader } from './part';
+import { shellMaterial, pod, podContours } from './organic';
 
 export function buildEnvelopes(): Part[] {
   return ontology.envelopes.map((e) => {
     const l = e.layout;
-    const r = l.radius ?? 0;
+    const k = style.organic.envelopeK;
     const group = new THREE.Group();
     group.position.set(l.x, l.y, l.z);
-    const fm = faceMaterial(style.faceOpacity);
-    const em = edgeMaterial();
-    const faces = new THREE.Mesh(new RoundedBoxGeometry(l.w, l.h, l.d, 4, r), fm);
+    const fm = shellMaterial(style.faceOpacity, style.faceColor, style.organic.envelopeRimGain);
+    const em = edgeMaterial(style.organic.envelopeInk);
+    const faces = new THREE.Mesh(pod(l.w, l.h, l.d, k), fm);
     faces.renderOrder = 1;
-    // Edges drawn on the 45-degree line of each rounded edge.
-    const inset = r * (1 - Math.SQRT1_2) * 2;
-    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(l.w - inset, l.h - inset, l.d - inset)), em);
+    const edges = new THREE.LineSegments(podContours(l.w, l.h, l.d, k), em);
     group.add(faces, edges);
-    return { id: e.id, level: 'envelope', envelopeOf: e.id, object: group, pickables: [], ...fader([fm], [em]) };
+    return { id: e.id, level: 'envelope', envelopeOf: e.id, object: group, pickables: [], ...fader([fm], [em], new THREE.Color(style.organic.envelopeInk)) };
   });
 }
